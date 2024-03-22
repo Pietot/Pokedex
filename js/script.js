@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const API = "https://tyradex.tech/api/v1/gen/1";
   const pokemonsListElement = document.getElementById("pokemon");
 
+  function 
+
+
   function getPokemons() {
     fetch(API)
       .then((response) => response.json())
@@ -18,5 +21,5 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Erreur lors de la récupération des pokémons :", error)
       );
   }
-  getPokemons();
+  ();
 });
