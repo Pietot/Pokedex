@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+html {
+  font-size: 20px;
+}
+
 .topnav {
   height: 250px;
   display: flex;
@@ -27,6 +31,11 @@
   display: flex;
   justify-content: center;
   margin-top: 50px;
+}
+
+#poke-cards {
+  width: 70%;
+  justify-content: center;
 }
 
 input[type="text"] {
@@ -54,8 +63,6 @@ button[type="submit"]:focus {
 }
 
 .pokemon-container {
-  margin-left: 50px;
-  margin-right: 50px;
   margin-top: 100px;
   display: flex;
   justify-content: center;
@@ -66,17 +73,84 @@ button[type="submit"]:focus {
   width: 100%;
   aspect-ratio: 5/7;
   padding: 5px;
-  transition: transform 0.2s ease;
-}
-
-.poke-card:hover {
-  transform: translateY(-10px);
 }
 
 .items {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   border-width: 2px;
   border-radius: 10px;
-  background-color: rgb(209, 209, 209);
+  border: #000 solid 1px;
   height: 100%;
   width: 100%;
+  transition: transform 0.2s ease;
+}
+
+.items:hover {
+  transform: translateY(-20px);
+}
+
+.poke-card-img {
+  width: 70%;
+  aspect-ratio: 1/1;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+}
+
+.poke-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poke-card-id {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.poke-card-id p {
+  color: #919191;
+  font-family: "Flexo-Bold", arial, sans-serif;
+  font-weight: bold;
+  font-size: 1vw;
+  margin: 0;
+  padding: 0;
+}
+
+.poke-card-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  font-family: "Flexo-Demi", arial, sans-serif;
+}
+
+.poke-card-name p {
+  color: #313131;
+  font-weight: bold;
+  font-size: 2vw;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .poke-card-id p {
+    font-size: 2vw;
+  }
+  .poke-card-name p {
+    font-size: 3vw;
+  }
+}
+@media screen and (max-width: 575px) {
+  .poke-card-id p {
+    font-size: 4vw;
+  }
+
+  .poke-card-name p {
+    font-size: 8vw;
+  }
 }
