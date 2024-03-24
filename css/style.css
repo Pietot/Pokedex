@@ -3,10 +3,6 @@
   margin: 0;
 }
 
-html {
-  font-size: 20px;
-}
-
 a:hover {
   text-decoration: none;
 }
@@ -116,7 +112,6 @@ button[type="submit"]:focus {
   display: flex;
   align-items: flex-start;
   margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 .poke-card-id p {
@@ -132,7 +127,6 @@ button[type="submit"]:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
   font-family: "Flexo-Demi", arial, sans-serif;
 }
 
@@ -144,32 +138,13 @@ button[type="submit"]:focus {
   padding: 0;
 }
 
-@media screen and (max-width: 767px) {
-  .poke-card-id p {
-    font-size: 2vw;
-  }
-  .poke-card-name p {
-    font-size: 3vw;
-  }
-}
-@media screen and (max-width: 575px) {
-  .poke-card-id p {
-    font-size: 4vw;
-  }
-
-  .poke-card-name p {
-    font-size: 8vw;
-  }
-}
-
 .poke-card-types {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   width: 80%;
-  height: 30%;
-  margin-bottom: 10px;
+  height: 40%;
 }
 
 .type {
@@ -181,11 +156,30 @@ button[type="submit"]:focus {
   height: 30%;
 }
 
-.poke-card-types p {
+.type p {
   color: #fff;
   font-family: "Flexo-Bold", arial, sans-serif;
   font-size: 1vw;
-  color: #ffffff;
   margin: 0;
   padding: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .poke-card-id p,
+  .type p {
+    font-size: 2vw;
+  }
+  .poke-card-name p {
+    font-size: 3vw;
+  }
+}
+@media screen and (max-width: 575px) {
+  .poke-card-id p,
+  .type p {
+    font-size: 4vw;
+  }
+
+  .poke-card-name p {
+    font-size: 8vw;
+  }
 }

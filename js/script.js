@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const TYRADEX_API = "https://tyradex.tech/api/v1/gen/1";
-  const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/";
+  const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
   const TYPE_TO_COLOR = {
     Normal: "#A8A77A",
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     newDiv.className = "col-xs-6 col-sm-5 col-md-3 poke-card";
     newDiv.style = "margin-bottom: 20px;";
     const newA = document.createElement("a");
-    newA.href = "pokemon.html?id=" + pokemonId.toString();
+    newA.href = "pokedex.html?id=" + pokemonId.toString();
     newA.className = "link";
     const divItems = document.createElement("div");
     divItems.className = "items";
