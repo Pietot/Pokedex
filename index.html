@@ -9,6 +9,10 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="img/favicon.ico" />
     <title>My Pokédex</title>
@@ -19,14 +23,14 @@
       <img src="img/logo.png" alt="Logo" class="logo-img" />
     </div>
     <div class="search-container">
-      <input type="text" placeholder="Search..." id="search-bar"/>
-      <button type="submit">Search</button>
+      <input type="text" placeholder="Rechercher..." id="search-bar" />
+      <button type="submit">
+        <img src="img/loupe.svg" alt="Loupe" style="height: 80%" />
+      </button>
     </div>
 
     <div class="pokemon-container">
-      <div class="row" id="poke-cards">
-
-      </div>
+      <div class="row" id="poke-cards"></div>
     </div>
     <script src="js/script.js"></script>
   </body>
