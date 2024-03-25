@@ -116,29 +116,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function setTypes(divItems, pokeTypes) {
     const typesElement = document.createElement("div");
     typesElement.className = "poke-card-types";
-    if (pokeTypes.length == 1) {
+    for (let i = 0; i < pokeTypes.length; i++) {
       const typeElement = document.createElement("div");
       typeElement.className = "type";
       typeElement.style =
-        "background-color: " + TYPE_TO_COLOR[pokeTypes[0].name];
+        "background-color: " + TYPE_TO_COLOR[pokeTypes[i].name];
+      const typeImage = document.createElement("img");
+      typeImage.src = "img/icons/" + pokeTypes[i].name + ".png";
+      typeImage.alt = pokeTypes[i].name;
+      typeImage.style.height = "80%";
       const pElement = document.createElement("p");
-      pElement.textContent = pokeTypes[0].name;
+      pElement.textContent = pokeTypes[i].name;
       typeElement.appendChild(pElement);
       typesElement.appendChild(typeElement);
-      divItems.appendChild(typesElement);
-    } else {
-      for (let i = 0; i < 2; i++) {
-        const typeElement = document.createElement("div");
-        typeElement.className = "type";
-        typeElement.style =
-          "background-color: " + TYPE_TO_COLOR[pokeTypes[i].name];
-        const pElement = document.createElement("p");
-        pElement.textContent = pokeTypes[i].name;
-        typeElement.appendChild(pElement);
-        typesElement.appendChild(typeElement);
-      }
-      divItems.appendChild(typesElement);
     }
+    divItems.appendChild(typesElement);
   }
 
   function setSearchBar() {
@@ -152,10 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
           .getElementsByClassName("poke-card-name")[0]
           .getElementsByTagName("p")[0]
           .textContent.toLowerCase();
-        const pokeCardId = pokeCard
-          .getElementsByClassName("poke-card-id")[0]
-          .textContent;
-        if (pokeCardName.includes(searchValue) || pokeCardId.includes(searchValue)) {
+        const pokeCardId =
+          pokeCard.getElementsByClassName("poke-card-id")[0].textContent;
+        if (
+          pokeCardName.includes(searchValue) ||
+          pokeCardId.includes(searchValue)
+        ) {
           pokeCard.style.display = "block";
         } else {
           pokeCard.style.display = "none";
