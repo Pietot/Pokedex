@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+p {
+  margin: 0;
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -27,10 +31,18 @@ a:hover {
   height: 150px;
 }
 
-.search-container {
+.sf-container {
+  margin-top: 50px;
+}
+
+.search {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+}
+
+#search-bar {
+  width: 15%;
+  font-size: 1.5em;
 }
 
 #poke-cards {
@@ -74,6 +86,7 @@ button[type="submit"]:focus {
   width: 100%;
   aspect-ratio: 5/7;
   padding: 5px;
+  margin-bottom: 20px;
 }
 
 .items {
@@ -145,24 +158,40 @@ button[type="submit"]:focus {
   justify-content: space-evenly;
   align-items: center;
   width: 80%;
-  height: 40%;
+  height: 28%;
 }
 
 .type {
   display: flex;
   justify-content: center;
-  align-items: center;
   border-radius: 20px;
   width: 100%;
   height: 30%;
+  position: relative; /* Ajout de position relative pour positionner .type-image */
 }
 
-.type p {
+.type-name {
+  display: flex;
+  align-items: center;
+  height: 100%;
   color: #fff;
   font-family: "Flexo-Bold", arial, sans-serif;
   font-size: 1vw;
-  margin: 0;
-  padding: 0;
+  position: absolute; /* Positionnement absolu pour centrer le texte */
+  left: 50%; /* Décalage de 50% de la largeur de .type */
+  transform: translateX(-50%); /* Centrage horizontal du texte */
+}
+
+.type-image {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute; /* Positionnement absolu pour décaler l'image */
+  left: 10px; /* Décalage de 10px par rapport à la gauche */
+}
+
+.type-image img {
+  height: 80%;
 }
 
 @media screen and (max-width: 767px) {

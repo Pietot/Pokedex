@@ -23,6 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
     Fée: "#D685AD",
   };
 
+  function setfilters() {
+    setGenerationFilter();
+  }
+
+  function setGenerationFilter() {
+    const generationFilter = document.getElementById("generation-filter");
+    generationFilter.addEventListener("change", () => {});
+  }
+
   async function getJson(url) {
     try {
       const response = await fetch(url);
@@ -57,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function createPokeCard(pokemonId, pokeTypes) {
     const newDiv = document.createElement("div");
     newDiv.className = "col-xs-6 col-sm-5 col-md-3 poke-card";
-    newDiv.style = "margin-bottom: 20px;";
     const newA = document.createElement("a");
     newA.href = "pokedex.html?id=" + pokemonId.toString();
     newA.className = "link";
@@ -73,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ", " +
         TYPE_TO_COLOR[pokeTypes[1].name] +
         ") 1";
-      divItems.style.borderImageSlice = "1";
     }
     newA.appendChild(divItems);
     newDiv.appendChild(newA);
@@ -121,13 +128,19 @@ document.addEventListener("DOMContentLoaded", () => {
       typeElement.className = "type";
       typeElement.style =
         "background-color: " + TYPE_TO_COLOR[pokeTypes[i].name];
+      const divImage = document.createElement("div");
+      divImage.className = "type-image";
+      const divP = document.createElement("div");
+      divP.className = "type-name";
       const typeImage = document.createElement("img");
       typeImage.src = "img/icons/" + pokeTypes[i].name + ".png";
       typeImage.alt = pokeTypes[i].name;
-      typeImage.style.height = "80%";
       const pElement = document.createElement("p");
       pElement.textContent = pokeTypes[i].name;
-      typeElement.appendChild(pElement);
+      divImage.appendChild(typeImage);
+      divP.appendChild(pElement);
+      typeElement.appendChild(divImage);
+      typeElement.appendChild(divP);
       typesElement.appendChild(typeElement);
     }
     divItems.appendChild(typesElement);
@@ -158,6 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  setPokeCards();
   setSearchBar();
+  setPokeCards();
 });
