@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const TYRADEX_API = "https://tyradex.tech/api/v1/gen/1";
+  const TYRADEX_API = "https://tyradex.tech/api/v1/";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
   const TYPE_TO_COLOR = {
@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     Roche: "#B6A136",
     Spectre: "#735797",
     Dragon: "#6F35FC",
+    Ténèbres: "#705746",
+    Acier: "#B7B7CE",
     Fée: "#D685AD",
   };
 
@@ -31,30 +33,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function setPokeCards() {
+  async function setPokeCards(generation = 0) {
     try {
-      const POKE_JSON = await getJson(TYRADEX_API);
-      for (let pokemonId = 1; pokemonId <= POKE_JSON.length; pokemonId++) {
-        let pokeTypes = POKE_JSON[pokemonId - 1].types;
-        let divItems = createPokeCard(pokemonId, pokeTypes);
-        formattedId = setPokeImage(pokemonId);
-        setIdex(formattedId, divItems);
-        setName(POKE_JSON, divItems, pokemonId);
-        setTypes(divItems, pokeTypes);
-      }
+      const call = generation === 0 ? "pokemon" : `gen/${generation}`;
+      const POKE_JSON = await getJson(TYRADEX_API + call);
+      POKE_JSON.forEach((pokeInfo, pokeJsonIndex) => {
+        if (pokeInfo.name.fr !== "MissingNo.") {
+          const pokeId = pokeInfo.pokedex_id;
+          const pokeTypes = pokeInfo.types;
+          const divItems = createPokeCard(pokeId, pokeTypes);
+          const formattedId = pokeId.toString().padStart(3, "0");
+          setPokeImage(pokeId, formattedId);
+          setIndex(formattedId, divItems);
+          setName(POKE_JSON, divItems, pokeJsonIndex);
+          setTypes(divItems, pokeTypes);
+        }
+      });
     } catch (error) {
       console.error("Erreur lors de la récupération des pokémons :", error);
     }
-  }
-
-  function setPokeImage(pokemonId) {
-    const formattedId = pokemonId.toString().padStart(3, "0");
-    const SPRITE = POKE_IMG + formattedId + ".png";
-    const pokeCardElement = document.getElementById(
-      "poke-card-" + pokemonId.toString()
-    );
-    addPokeImage(SPRITE, pokeCardElement);
-    return formattedId;
   }
 
   function createPokeCard(pokemonId, pokeTypes) {
@@ -84,7 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return divItems;
   }
 
-  function addPokeImage(SPRITE, pokeCardElement) {
+  function setPokeImage(pokemonId, formattedId) {
+    const SPRITE = POKE_IMG + formattedId + ".png";
+    const pokeCardElement = document.getElementById(
+      "poke-card-" + pokemonId.toString()
+    );
     const pokeCardImgDiv = document.createElement("div");
     pokeCardImgDiv.className = "poke-card-img";
     const pokeCardImg = document.createElement("img");
@@ -93,7 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
     pokeCardElement.appendChild(pokeCardImgDiv);
   }
 
-  function setIdex(pokemonId, divItems) {
+  function setIndex(pokemonId, divItems) {
+    pokemonId = pokemonId.padStart(4, "0");
     const idElement = document.createElement("div");
     idElement.className = "poke-card-id";
     const pElement = document.createElement("p");
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nameElement = document.createElement("div");
     nameElement.className = "poke-card-name";
     const pElement = document.createElement("p");
-    pElement.textContent = POKE_JSON[pokemonId - 1].name.fr;
+    pElement.textContent = POKE_JSON[pokemonId].name.fr;
     nameElement.appendChild(pElement);
     divItems.appendChild(nameElement);
   }
@@ -126,11 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
       divItems.appendChild(typesElement);
     } else {
       for (let i = 0; i < 2; i++) {
-        let typeElement = document.createElement("div");
+        const typeElement = document.createElement("div");
         typeElement.className = "type";
         typeElement.style =
           "background-color: " + TYPE_TO_COLOR[pokeTypes[i].name];
-        let pElement = document.createElement("p");
+        const pElement = document.createElement("p");
         pElement.textContent = pokeTypes[i].name;
         typeElement.appendChild(pElement);
         typesElement.appendChild(typeElement);
@@ -138,5 +140,30 @@ document.addEventListener("DOMContentLoaded", () => {
       divItems.appendChild(typesElement);
     }
   }
+
+  function setSearchBar() {
+    const searchInput = document.getElementById("search-bar");
+    searchInput.addEventListener("input", () => {
+      const searchValue = searchInput.value.toLowerCase();
+      const pokeCards = document.getElementsByClassName("poke-card");
+      for (let i = 0; i < pokeCards.length; i++) {
+        const pokeCard = pokeCards[i];
+        const pokeCardName = pokeCard
+          .getElementsByClassName("poke-card-name")[0]
+          .getElementsByTagName("p")[0]
+          .textContent.toLowerCase();
+        const pokeCardId = pokeCard
+          .getElementsByClassName("poke-card-id")[0]
+          .textContent;
+        if (pokeCardName.includes(searchValue) || pokeCardId.includes(searchValue)) {
+          pokeCard.style.display = "block";
+        } else {
+          pokeCard.style.display = "none";
+        }
+      }
+    });
+  }
+
   setPokeCards();
+  setSearchBar();
 });
