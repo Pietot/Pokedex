@@ -23,8 +23,52 @@ document.addEventListener("DOMContentLoaded", () => {
     Fée: "#D685AD",
   };
 
-  function setfilters() {
-    setGenerationFilter();
+  function setFilters() {
+    setTypesFilter();
+  }
+
+  function setTypesFilter() {
+    const typesFilter = document.getElementById("types-filter");
+    for (const TYPE_NAME in TYPE_TO_COLOR) {
+      const typeInput = document.createElement("input");
+      typeInput.type = "checkbox";
+      typeInput.id = "type-" + TYPE_NAME;
+      const typeLabel = document.createElement("label");
+      typeLabel.htmlFor = "type-" + TYPE_NAME;
+      typeLabel.style.borderColor = TYPE_TO_COLOR[TYPE_NAME];
+      const typeImage = document.createElement("img");
+      typeImage.src = "img/icons/" + TYPE_NAME + ".png";
+      typeImage.alt = Object.keys(TYPE_TO_COLOR)[TYPE_NAME];
+      typeLabel.appendChild(typeImage);
+      typesFilter.appendChild(typeInput);
+      typesFilter.appendChild(typeLabel);
+      typesFilter.addEventListener("change", () => {
+        const checkedTypes = document.querySelectorAll(
+          "input[type=checkbox]:checked"
+        );
+        const pokeCards = document.getElementsByClassName("poke-card");
+        for (let i = 0; i < pokeCards.length; i++) {
+          const pokeCard = pokeCards[TYPE_NAME];
+          const pokeCardTypes = pokeCard.getElementsByClassName("type-name");
+          let isPokeCardValid = false;
+          for (let j = 0; j < pokeCardTypes.length; j++) {
+            const pokeCardType = pokeCardTypes[j].textContent;
+            for (let k = 0; k < checkedTypes.length; k++) {
+              const checkedType = checkedTypes[k].id.replace("type-", "");
+              if (pokeCardType === Object.keys(TYPE_TO_COLOR)[checkedType]) {
+                isPokeCardValid = true;
+                break;
+              }
+            }
+          }
+          if (isPokeCardValid) {
+            pokeCard.style.display = "block";
+          } else {
+            pokeCard.style.display = "none";
+          }
+        }
+      });
+    }
   }
 
   function setGenerationFilter() {
@@ -173,4 +217,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setSearchBar();
   setPokeCards();
+  setFilters();
 });
