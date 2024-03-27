@@ -7,22 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const TYPE_TO_COLOR = {
-    Normal: "#A8A77A",
-    Feu: "#EE8130",
-    Eau: "#6390F0",
-    Plante: "#7AC74C",
-    Électrik: "#F7D02C",
-    Glace: "#96D9D6",
-    Combat: "#C22E28",
-    Poison: "#A33EA1",
-    Sol: "#E2BF65",
-    Vol: "#A98FF3",
-    Psy: "#F95587",
-    Insecte: "#A6B91A",
-    Roche: "#B6A136",
-    Spectre: "#735797",
-    Dragon: "#6F35FC",
-    Fée: "#D685AD",
+
   };
 
   async function getJson(url) {

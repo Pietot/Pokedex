@@ -3,70 +3,80 @@ document.addEventListener("DOMContentLoaded", () => {
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
   const TYPE_TO_COLOR = {
-    Normal: "#A8A77A",
-    Feu: "#EE8130",
-    Eau: "#6390F0",
-    Plante: "#7AC74C",
-    Électrik: "#F7D02C",
-    Glace: "#96D9D6",
-    Combat: "#C22E28",
-    Poison: "#A33EA1",
-    Sol: "#E2BF65",
-    Vol: "#A98FF3",
-    Psy: "#F95587",
-    Insecte: "#A6B91A",
-    Roche: "#B6A136",
-    Spectre: "#735797",
-    Dragon: "#6F35FC",
-    Ténèbres: "#705746",
-    Acier: "#B7B7CE",
-    Fée: "#D685AD",
+    Normal: "#abacac",
+    Feu: "#ff662e",
+    Eau: "#2b99ff",
+    Plante: "#45c826",
+    Électrik: "#ffdf00",
+    Glace: "#44dfff",
+    Combat: "#ffa702",
+    Poison: "#9e4fd6",
+    Sol: "#b17d3b",
+    Vol: "#9cd3ff",
+    Psy: "#ff6885",
+    Insecte: "#a8ae26",
+    Roche: "#c0bc8c",
+    Spectre: "#734876",
+    Dragon: "#5867e1",
+    Ténèbres: "#534b4b",
+    Acier: "#6fb7dd",
+    Fée: "#ffb5ff",
   };
 
   function setFilters() {
+    setTypesBar();
     setTypesFilter();
   }
 
-  function setTypesFilter() {
-    const typesFilter = document.getElementById("types-filter");
+  function setTypesBar() {
+    const typesFilter = document.getElementById("types");
     for (const TYPE_NAME in TYPE_TO_COLOR) {
       const typeInput = document.createElement("input");
       typeInput.type = "checkbox";
-      typeInput.id = "type-" + TYPE_NAME;
+      typeInput.id = TYPE_NAME.toLowerCase();
       const typeLabel = document.createElement("label");
-      typeLabel.htmlFor = "type-" + TYPE_NAME;
+      typeLabel.htmlFor = TYPE_NAME.toLowerCase();
       typeLabel.style.borderColor = TYPE_TO_COLOR[TYPE_NAME];
       const typeImage = document.createElement("img");
       typeImage.src = "img/icons/" + TYPE_NAME + ".png";
-      typeImage.alt = Object.keys(TYPE_TO_COLOR)[TYPE_NAME];
+      typeImage.alt = TYPE_NAME;
       typeLabel.appendChild(typeImage);
       typesFilter.appendChild(typeInput);
       typesFilter.appendChild(typeLabel);
-      typesFilter.addEventListener("change", () => {
-        const checkedTypes = document.querySelectorAll(
-          "input[type=checkbox]:checked"
+    }
+  }
+
+  function setTypesFilter() {
+    const typesFilter = document.getElementById("types");
+    const combinedOnly = document.getElementById("combined-only");
+    typesFilter.addEventListener("change", filter);
+    combinedOnly.addEventListener("change", filter);
+    
+    function filter() {
+      console.log(combinedOnly.checked);
+      const checkedTypes = Array.from(
+        document.querySelectorAll("input[type=checkbox]:checked")
+      );
+      const pokeCards = Array.from(
+        document.getElementsByClassName("poke-card")
+      );
+      if (checkedTypes.length === 0) {
+        pokeCards.forEach((pokeCard) => (pokeCard.style.display = "block"));
+        return;
+      }
+      pokeCards.forEach((pokeCard) => {
+        const pokeCardTypes = Array.from(
+          pokeCard.querySelectorAll(".type-name p")
         );
-        const pokeCards = document.getElementsByClassName("poke-card");
-        for (let i = 0; i < pokeCards.length; i++) {
-          const pokeCard = pokeCards[TYPE_NAME];
-          const pokeCardTypes = pokeCard.getElementsByClassName("type-name");
-          let isPokeCardValid = false;
-          for (let j = 0; j < pokeCardTypes.length; j++) {
-            const pokeCardType = pokeCardTypes[j].textContent;
-            for (let k = 0; k < checkedTypes.length; k++) {
-              const checkedType = checkedTypes[k].id.replace("type-", "");
-              if (pokeCardType === Object.keys(TYPE_TO_COLOR)[checkedType]) {
-                isPokeCardValid = true;
-                break;
-              }
-            }
-          }
-          if (isPokeCardValid) {
-            pokeCard.style.display = "block";
-          } else {
-            pokeCard.style.display = "none";
-          }
-        }
+        pokeCard.style.display = pokeCardTypes.some((pokeCardType) =>
+          checkedTypes.some(
+            (checkedType) =>
+              pokeCardType.textContent.toLowerCase() ===
+              checkedType.id.toLowerCase()
+          )
+        )
+          ? "block"
+          : "none";
       });
     }
   }

@@ -46,43 +46,71 @@ a:hover {
   width: 20%;
 }
 
-.types-filter {
+.types {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 52%;
+  width: 90%;
   height: 70px;
-  background-color: grey;
+  background-color: #cecece;;
+  border-radius: 100px;
+}
+
+.type-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 50px;
 }
 
-.types-filter input[type="checkbox"] {
+.type-label p {
+  font-size: 1.5em;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.types-filter {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.types input[type="checkbox"] {
   display: none;
 }
 
-.types-filter label {
+.types label {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   height: 60px;
   aspect-ratio: 1/1;
-  border: 2px solid;
   border-radius: 100%;
 }
 
-.types-filter img {
+.types img {
   height: 70px;
 }
 
-.types-filter input[type="checkbox"]:checked + label img {
+.types input[type="checkbox"]:checked + label img {
+  filter: grayscale(0%);
+  transition: filter 0.2s ease;
+}
+
+.types input[type="checkbox"]:not(:checked) + label img {
   filter: grayscale(100%);
   transition: filter 0.2s ease;
 }
 
-.types-filter input[type="checkbox"]:not(:checked) + label img {
-  filter: grayscale(0%);
-  transition: filter 0.1s ease;
+.types input[type="checkbox"]:not(:checked) + label {
+  border: 5px transparent;
+}
+
+.types input[type="checkbox"]:checked + label {
+  border: 5px solid;
 }
 
 .right-filter {
