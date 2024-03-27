@@ -51,11 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const combinedOnly = document.getElementById("combined-only");
     typesFilter.addEventListener("change", filter);
     combinedOnly.addEventListener("change", filter);
-    
     function filter() {
       console.log(combinedOnly.checked);
       const checkedTypes = Array.from(
-        document.querySelectorAll("input[type=checkbox]:checked")
+        document.querySelectorAll(".types input[type=checkbox]:checked")
       );
       const pokeCards = Array.from(
         document.getElementsByClassName("poke-card")
@@ -68,13 +67,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const pokeCardTypes = Array.from(
           pokeCard.querySelectorAll(".type-name p")
         );
-        pokeCard.style.display = pokeCardTypes.some((pokeCardType) =>
-          checkedTypes.some(
-            (checkedType) =>
+        const hasCombinedTypes =
+          checkedTypes.length > 1 && combinedOnly.checked;
+        const cardTypeMatches = checkedTypes.every((checkedType) =>
+          pokeCardTypes.some(
+            (pokeCardType) =>
               pokeCardType.textContent.toLowerCase() ===
               checkedType.id.toLowerCase()
           )
-        )
+        );
+        pokeCard.style.display = hasCombinedTypes
+          ? cardTypeMatches
+            ? "block"
+            : "none"
+          : pokeCardTypes.some((pokeCardType) =>
+              checkedTypes.some(
+                (checkedType) =>
+                  pokeCardType.textContent.toLowerCase() ===
+                  checkedType.id.toLowerCase()
+              )
+            )
           ? "block"
           : "none";
       });
