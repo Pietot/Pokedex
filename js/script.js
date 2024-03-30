@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
-  const checkboxes = document.querySelectorAll('input[name="selection"]');
+  const CHECKBOXES = document.querySelectorAll('input[name="selection"]');
 
   const TYPE_TO_COLOR = {
     Normal: "#abacac",
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function setFilters() {
     setTypesBar();
     setTypesFilter();
+    setGenerationFilter();
   }
 
   function setTypesBar() {
@@ -111,15 +112,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function setGenerationFilter() {
-    const generationFilter = document.getElementById("generation-filter");
-    generationFilter.addEventListener("change", () => {});
+  async function setGenerationFilter() {
+    try {
+      const ALL_POKEMONS = await getJson(TYRADEX_API + "pokemon");
+      const LAST_GENERATION = ALL_POKEMONS[ALL_POKEMONS.length - 1].generation;
+      const generationFilter = document.getElementById("generations-filter");
+      for (let i = 1; i <= LAST_GENERATION; i++) {
+        const generationDiv = document.createElement("div");
+        generationDiv.className = "generation";
+        const generationInput = document.createElement("input");
+        generationInput.type = "checkbox";
+        generationInput.name = "generation-" + i;
+        generationInput.id = "generation-" + i;
+        generationInput.value = i;
+        generationInput.addEventListener("change", filter);
+        const generationLabel = document.createElement("label");
+        generationLabel.htmlFor = "generation-" + i;
+        generationLabel.textContent = "Génération " + i;
+        generationDiv.appendChild(generationInput);
+        generationDiv.appendChild(generationLabel);
+        generationFilter.appendChild(generationDiv);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des pokémons :", error);
+    }
+    function filter() {
+      const checkedGenerations = Array.from(
+        document.querySelectorAll('.generation input[type="checkbox"]:checked')
+      );
+      console.log(checkedGenerations);
+      const pokeCards = Array.from(
+        document.getElementsByClassName("poke-card")
+      );
+      if (checkedGenerations.length === 0) {
+        pokeCards.forEach((pokeCard) => (pokeCard.style.display = "block"));
+        return;
+      }
+      pokeCards.forEach((pokeCard) => {
+        const pokeCardGeneration = pokeCard.querySelector("a").value;
+        pokeCard.style.display = checkedGenerations.some(
+          (generation) => generation.value == pokeCardGeneration
+        )
+          ? "block"
+          : "none";
+      });
+    }
   }
 
   function setCheckboxes() {
-    checkboxes.forEach(function (checkbox) {
+    CHECKBOXES.forEach(function (checkbox) {
       checkbox.addEventListener("change", function () {
-        checkboxes.forEach(function (checkbox1) {
+        CHECKBOXES.forEach(function (checkbox1) {
           if (checkbox1 !== checkbox) {
             checkbox1.checked = false;
           }
@@ -146,7 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (pokeInfo.name.fr !== "MissingNo.") {
           const pokeId = pokeInfo.pokedex_id;
           const pokeTypes = pokeInfo.types;
-          const divItems = createPokeCard(pokeId, pokeTypes);
+          const generation = pokeInfo.generation;
+          const divItems = createPokeCard(pokeId, pokeTypes, generation);
           const formattedId = pokeId.toString().padStart(3, "0");
           setPokeImage(pokeId, formattedId);
           setIndex(formattedId, divItems);
@@ -159,12 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function createPokeCard(pokemonId, pokeTypes) {
+  function createPokeCard(pokemonId, pokeTypes, generation) {
     const newDiv = document.createElement("div");
     newDiv.className = "col-xs-6 col-sm-5 col-md-3 poke-card";
     const newA = document.createElement("a");
     newA.href = "pokedex.html?id=" + pokemonId.toString();
     newA.className = "link";
+    newA.value = generation;
     const divItems = document.createElement("div");
     divItems.className = "items";
     divItems.id = "poke-card-" + pokemonId.toString();
