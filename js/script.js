@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
+  const checkboxes = document.querySelectorAll('input[name="selection"]');
+
   const TYPE_TO_COLOR = {
     Normal: "#abacac",
     Feu: "#ff662e",
@@ -48,13 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setTypesFilter() {
     const typesFilter = document.getElementById("types");
-    const combinedOnly = document.getElementById("combined-only");
+    const exactly = document.getElementById("exactly");
+    const only = document.getElementById("only");
     typesFilter.addEventListener("change", filter);
-    combinedOnly.addEventListener("change", filter);
+    exactly.addEventListener("change", filter);
+    only.addEventListener("change", filter);
     function filter() {
-      console.log(combinedOnly.checked);
       const checkedTypes = Array.from(
-        document.querySelectorAll(".types input[type=checkbox]:checked")
+        document.querySelectorAll('.types input[type="checkbox"]:checked')
       );
       const pokeCards = Array.from(
         document.getElementsByClassName("poke-card")
@@ -63,39 +66,38 @@ document.addEventListener("DOMContentLoaded", () => {
         pokeCards.forEach((pokeCard) => (pokeCard.style.display = "block"));
         return;
       }
-      pokeCards.forEach((pokeCard) => {
-        const pokeCardTypes = Array.from(
-          pokeCard.querySelectorAll(".type-name p")
-        );
-        const hasCombinedTypes =
-          checkedTypes.length > 1 && combinedOnly.checked;
-        const cardTypeMatches = checkedTypes.every((checkedType) =>
-          pokeCardTypes.some(
-            (pokeCardType) =>
-              pokeCardType.textContent.toLowerCase() ===
-              checkedType.id.toLowerCase()
-          )
-        );
-        pokeCard.style.display = hasCombinedTypes
-          ? cardTypeMatches
-            ? "block"
-            : "none"
-          : pokeCardTypes.some((pokeCardType) =>
-              checkedTypes.some(
-                (checkedType) =>
-                  pokeCardType.textContent.toLowerCase() ===
-                  checkedType.id.toLowerCase()
-              )
-            )
-          ? "block"
-          : "none";
-      });
+      if (exactly.checked) {
+        pokeCards.forEach((pokeCard) => {
+          const pokeCardTypes = Array.from(
+            pokeCard.querySelectorAll(".type-name p")
+          ).map((p) => p.textContent.toLowerCase());
+          JSON.stringify(pokeCardTypes) ===
+          JSON.stringify(checkedTypes.map((type) => type.id))
+            ? (pokeCard.style.display = "block")
+            : (pokeCard.style.display = "none");
+        });
+      } else if (only.checked) {
+        const pokeCards = document.querySelectorAll(".poke-card");
+        pokeCards.forEach(function (pokeCard) {});
+      }
     }
   }
 
   function setGenerationFilter() {
     const generationFilter = document.getElementById("generation-filter");
     generationFilter.addEventListener("change", () => {});
+  }
+
+  function setCheckboxes() {
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("change", function () {
+        checkboxes.forEach(function (checkbox1) {
+          if (checkbox1 !== checkbox) {
+            checkbox1.checked = false;
+          }
+        });
+      });
+    });
   }
 
   async function getJson(url) {
@@ -240,4 +242,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setSearchBar();
   setPokeCards();
   setFilters();
+  setCheckboxes();
 });

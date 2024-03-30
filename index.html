@@ -31,9 +31,15 @@
       <p>Filtrer par type</p>
     </div>
     <div class="types-filter" id="types-filter">
-      <div class="combined-only">
-        <input type="checkbox" id="combined-only" />
-        <label for="combined-only">Uniquement les types séléctionné</label>
+      <div class="check-filter">
+        <div class="exactly">
+          <input type="checkbox" id="exactly" name="selection" />
+          <label for="exactly">Exactement les types séléctionnés</label>
+        </div>
+        <div class="only">
+          <input type="checkbox" id="only" name="selection" />
+          <label for="only">Seulement les types séléctionnés</label>
+        </div>
       </div>
       <div class="types" id="types"></div>
     </div>
@@ -45,4 +51,5 @@
   </body>
 </html>
 
-<!--  FILTRER GEN, TYPE, RARETER -->
+<!--  FILTRER GEN, RARETER -->
+<!--  SORT BY  -->
