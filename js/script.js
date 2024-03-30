@@ -78,7 +78,35 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       } else if (only.checked) {
         const pokeCards = document.querySelectorAll(".poke-card");
-        pokeCards.forEach(function (pokeCard) {});
+        pokeCards.forEach((pokeCard) => {
+          filterOnly(
+            pokeCard,
+            checkedTypes.map((type) => type.id)
+          )
+            ? (pokeCard.style.display = "block")
+            : (pokeCard.style.display = "none");
+        });
+      } else {
+        pokeCards.forEach((pokeCard) => {
+          const pokeCardTypes = Array.from(
+            pokeCard.querySelectorAll(".type-name p")
+          );
+          pokeCard.style.display = pokeCardTypes.some((pokeCardType) =>
+            checkedTypes.some(
+              (checkedType) =>
+                pokeCardType.textContent.toLowerCase() ===
+                checkedType.id.toLowerCase()
+            )
+          )
+            ? "block"
+            : "none";
+        });
+      }
+      function filterOnly(pokeCard, checkedTypes) {
+        const pokeCardTypes = Array.from(
+          pokeCard.querySelectorAll(".type-name p")
+        ).map((p) => p.textContent.toLowerCase());
+        return pokeCardTypes.every((type) => checkedTypes.includes(type));
       }
     }
   }
