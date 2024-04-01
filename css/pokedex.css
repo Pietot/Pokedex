@@ -3,21 +3,60 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
-  background-color: #323232;
+  background-color: #535353;
 }
 .container {
   background-color: white;
-  width: 50%;
+  width: 1100px;
 }
 
 .triggers {
-  height: 20%;
+  height: 15%;
   width: 100%;
-  background-color: antiquewhite;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .left-trigger {
-  height: 400px;
-  width: 400px;
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 50%, 50% 100%, 0 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  width: 45%;
+  background-color: #a4a4a4;
+  border-radius: 100% 20px 20px 20px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.left-trigger:hover {
+  /* in js*/
+}
+
+.left-trigger:active {
+  transform: translateY(10px);
+}
+
+.right-trigger {
+  height: 90%;
+  width: 45%;
+  background-color: #a4a4a4;
+  border-radius: 10% 100% 10% 10%;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.right-trigger:hover {
+  /* in js*/
+}
+
+.right-trigger:active {
+  transform: translateY(10px);
+}
+
+.trigger-details {
+  display: flex;
+  flex-direction: row;
+  transform: translateY(20px);
 }
