@@ -18,6 +18,14 @@ body {
   align-items: center;
 }
 
+.trigger-details {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  transform: translateY(20px);
+  width: 50%;
+}
+
 .left-trigger {
   display: flex;
   justify-content: center;
@@ -55,8 +63,33 @@ body {
   transform: translateY(10px);
 }
 
-.trigger-details {
-  display: flex;
-  flex-direction: row;
-  transform: translateY(20px);
+.tg-icon {
+  height: 50px;
+  width: 50px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+#left-tg-icon img {
+  transform: rotate(180deg);
+}
+
+.tg-icon img {
+  height: 100%;
+}
+
+.tg-id {
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.tg-name {
+  position: relative;
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #616161;
+  font-size: 1.5em;
+  font-weight: bold;
+  bottom: 0;
 }
