@@ -46,14 +46,11 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: #a4a4a4;
+  background-color: transparent;
+  border: solid 2px black;
   border-radius: 100% 20px 20px 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
-}
-
-.left-trigger:hover {
-  /* in js*/
 }
 
 .left-trigger:active {
@@ -70,14 +67,15 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: #a4a4a4;
+  background-color: transparent;
+  border: solid 2px black;
   border-radius: 20px 100% 20px 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .right-trigger:hover {
-  /* in js*/
+  transition: transform 0.2 ease;
 }
 
 .right-trigger:active {
@@ -105,7 +103,7 @@ body {
 
 .td-id {
   font-family: "Flexo-Bold", arial, sans-serif;
-  color: #fff;
+  color: #000;
   font-size: 1.5em;
   font-weight: bold;
   width: 30%;

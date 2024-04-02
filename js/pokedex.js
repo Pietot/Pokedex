@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const POKEMON_ID =
     parseInt(new URLSearchParams(window.location.search).get("id")) || 1;
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
+  const POKE_API = "https://pokeapi.co/api/v2/pokemon-species/";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const TYPE_TO_COLOR = {
     Normal: "#abacac",
@@ -56,18 +57,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document.title = NAME;
   }
 
-  async function setLeftTrigger(pokemonId, POKE_JSON) {
-    const LEFT_TRIGER_A = document.getElementById("left-trigger-a");
+  function setLeftTrigger(pokemonId, POKE_JSON) {
+    const LEFT_TRIGGER_A = document.getElementById("left-trigger-a");
+    const LEFT_TRIGGER = document.getElementById("left-trigger");
     const LEFT_TD = document.getElementById("left-td");
     const LEFT_ICON = document.getElementById("left-td-icon");
     const LEFT_ID = document.getElementById("left-td-id");
     const LEFT_NAME = document.getElementById("left-td-name");
     const PREVIOUS_POKEMON_ID =
       pokemonId === 1 ? POKE_JSON.length - 1 : pokemonId - 1;
-    const PREVIOUS_POKEMON_NAME = (
-      await getJson(TYRADEX_API + "pokemon/" + PREVIOUS_POKEMON_ID)
-    ).name.fr;
-    LEFT_TRIGER_A.href = "pokedex.html?id=" + PREVIOUS_POKEMON_ID;
+    const PREVIOUS_POKEMON_NAME = POKE_JSON[PREVIOUS_POKEMON_ID].name.fr;
+    LEFT_TRIGGER_A.href = "pokedex.html?id=" + PREVIOUS_POKEMON_ID;
+    LEFT_TRIGGER.style.transition = "background-color 0.5s ease";
+    LEFT_TRIGGER.addEventListener("mouseenter", () => {
+      LEFT_TRIGGER.style.backgroundColor =
+        TYPE_TO_COLOR[POKE_JSON[PREVIOUS_POKEMON_ID].types[0].name];
+    });
+    LEFT_TRIGGER.addEventListener("mouseleave", () => {
+      LEFT_TRIGGER.style.backgroundColor = "transparent";
+    });
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
     ARROW.alt = "Left Arrow";
@@ -80,18 +88,25 @@ document.addEventListener("DOMContentLoaded", () => {
     LEFT_TD.appendChild(LEFT_NAME);
   }
 
-  async function setRightTrigger(pokemonId, POKE_JSON) {
+  function setRightTrigger(pokemonId, POKE_JSON) {
     const RIGHT_TRIGER_A = document.getElementById("right-trigger-a");
+    const RIGHT_TRIGGER = document.getElementById("right-trigger");
     const RIGHT_TD = document.getElementById("right-td");
     const RIGHT_ICON = document.getElementById("right-td-icon");
     const RIGHT_ID = document.getElementById("right-td-id");
     const RIGHT_NAME = document.getElementById("right-td-name");
     const NEXT_POKEMON_ID =
       pokemonId === POKE_JSON.length - 1 ? 1 : pokemonId + 1;
-    const NEXT_POKEMON_NAME = (
-      await getJson(TYRADEX_API + "pokemon/" + NEXT_POKEMON_ID)
-    ).name.fr;
+    const NEXT_POKEMON_NAME = POKE_JSON[NEXT_POKEMON_ID].name.fr;
     RIGHT_TRIGER_A.href = "pokedex.html?id=" + NEXT_POKEMON_ID;
+    RIGHT_TRIGGER.style.transition = "background-color 0.5s ease";
+    RIGHT_TRIGGER.addEventListener("mouseenter", () => {
+      RIGHT_TRIGGER.style.backgroundColor =
+        TYPE_TO_COLOR[POKE_JSON[NEXT_POKEMON_ID].types[0].name];
+    });
+    RIGHT_TRIGGER.addEventListener("mouseleave", () => {
+      RIGHT_TRIGGER.style.backgroundColor = "transparent";
+    });
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
     ARROW.alt = "Left Arrow";
