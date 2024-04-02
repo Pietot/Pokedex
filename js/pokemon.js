@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function setPokedex(pokemonId) {
     try {
-      const POKE_JSON = await getJson(TYRADEX_API + "pokemon/" + pokemonId);
-      setTitle(POKE_JSON);
+      const POKE_JSON = await getJson(TYRADEX_API + "pokemon");
+      setTitle(pokemonId, POKE_JSON);
       setLeftTrigger(pokemonId);
       setRightTrigger(pokemonId);
     } catch (error) {
@@ -51,12 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function setTitle(POKE_JSON) {
-    const NAME = POKE_JSON.name.fr;
+  function setTitle(pokemonId, POKE_JSON) {
+    const NAME = POKE_JSON[pokemonId].name.fr;
     document.title = NAME;
   }
 
-  async function setLeftTrigger(pokemonId) {
+  async function setLeftTrigger(pokemonId, POKE_JSON) {
     const LEFT_TG_DETAILS = document.getElementById("left-tg-details");
     const LEFT_ICON = document.getElementById("left-tg-icon");
     const LEFT_ID = document.getElementById("left-tg-id");
@@ -79,7 +79,30 @@ document.addEventListener("DOMContentLoaded", () => {
     LEFT_TG_DETAILS.appendChild(LEFT_ID);
     LEFT_TG_DETAILS.appendChild(LEFT_NAME);
   }
-  function setRightTrigger(pokemonId) {}
+
+  async function setRightTrigger(pokemonId, POKE_JSON) {
+    const RIGHT_TG_DETAILS = document.getElementById("right-tg-details");
+    const RIGHT_ICON = document.getElementById("right-tg-icon");
+    const RIGHT_ID = document.getElementById("right-tg-id");
+    const RIGHT_NAME = document.getElementById("right-tg-name");
+    const PREVIOUS_POKEMON_ID =
+      pokemonId === 1
+        ? (await getJson(TYRADEX_API + "pokemon")).length - 1
+        : pokemonId - 1;
+    const PREVIOUS_POKEMON_NAME = (
+      await getJson(TYRADEX_API + "pokemon/" + PREVIOUS_POKEMON_ID)
+    ).name.fr;
+    const ARROW = document.createElement("img");
+    ARROW.src = "img/arrow.png";
+    ARROW.alt = "Left Arrow";
+    RIGHT_ICON.appendChild(ARROW);
+    RIGHT_ID.textContent =
+      "N° " + PREVIOUS_POKEMON_ID.toString().padStart(3, "0");
+    RIGHT_NAME.textContent = PREVIOUS_POKEMON_NAME;
+    RIGHT_TG_DETAILS.appendChild(RIGHT_ICON);
+    RIGHT_TG_DETAILS.appendChild(RIGHT_ID);
+    RIGHT_TG_DETAILS.appendChild(RIGHT_NAME);
+  }
 
   setPokedex(POKEMON_ID);
 });
