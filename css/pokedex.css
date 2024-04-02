@@ -18,6 +18,20 @@ body {
   align-items: center;
 }
 
+.triggers a {
+  text-decoration: none;
+  width: 45%;
+  height: 90%;
+}
+
+#left-trigger-a {
+  border-radius: 100% 20px 20px 20px;
+}
+
+#right-trigger-a {
+  border-radius: 20px 100% 20px 20px;
+}
+
 .trigger-details {
   display: flex;
   justify-content: space-evenly;
@@ -30,8 +44,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90%;
-  width: 45%;
+  height: 100%;
+  width: 100%;
   background-color: #a4a4a4;
   border-radius: 100% 20px 20px 20px;
   cursor: pointer;
@@ -46,7 +60,7 @@ body {
   transform: translateY(10px);
 }
 
-#right-tg-details {
+#right-td {
   flex-direction: row-reverse;
 }
 
@@ -54,8 +68,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90%;
-  width: 45%;
+  height: 100%;
+  width: 100%;
   background-color: #a4a4a4;
   border-radius: 20px 100% 20px 20px;
   cursor: pointer;
@@ -70,22 +84,26 @@ body {
   transform: translateY(10px);
 }
 
-.tg-icon {
+.td-icon {
   height: 50px;
-  width: 50px;
+}
+
+#left-td-icon img {
+  transform: rotate(180deg);
   background-color: white;
   border-radius: 100%;
 }
 
-#left-tg-icon img {
-  transform: rotate(180deg);
+#right-td-icon img {
+  background-color: white;
+  border-radius: 100%;
 }
 
-.tg-icon img {
+.td-icon img {
   height: 100%;
 }
 
-.tg-id {
+.td-id {
   font-family: "Flexo-Bold", arial, sans-serif;
   color: #fff;
   font-size: 1.5em;
@@ -95,7 +113,7 @@ body {
   justify-content: center;
 }
 
-.tg-name {
+.td-name {
   position: relative;
   font-family: "Flexo-Bold", arial, sans-serif;
   color: #3a3a3a;

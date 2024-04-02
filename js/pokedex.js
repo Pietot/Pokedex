@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const POKE_JSON = await getJson(TYRADEX_API + "pokemon");
       setTitle(pokemonId, POKE_JSON);
-      setLeftTrigger(pokemonId);
-      setRightTrigger(pokemonId);
+      setLeftTrigger(pokemonId, POKE_JSON);
+      setRightTrigger(pokemonId, POKE_JSON);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du pokémon :",
@@ -57,51 +57,50 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function setLeftTrigger(pokemonId, POKE_JSON) {
-    const LEFT_TG_DETAILS = document.getElementById("left-tg-details");
-    const LEFT_ICON = document.getElementById("left-tg-icon");
-    const LEFT_ID = document.getElementById("left-tg-id");
-    const LEFT_NAME = document.getElementById("left-tg-name");
+    const LEFT_TRIGER_A = document.getElementById("left-trigger-a");
+    const LEFT_TD = document.getElementById("left-td");
+    const LEFT_ICON = document.getElementById("left-td-icon");
+    const LEFT_ID = document.getElementById("left-td-id");
+    const LEFT_NAME = document.getElementById("left-td-name");
     const PREVIOUS_POKEMON_ID =
-      pokemonId === 1
-        ? (await getJson(TYRADEX_API + "pokemon")).length - 1
-        : pokemonId - 1;
+      pokemonId === 1 ? POKE_JSON.length - 1 : pokemonId - 1;
     const PREVIOUS_POKEMON_NAME = (
       await getJson(TYRADEX_API + "pokemon/" + PREVIOUS_POKEMON_ID)
     ).name.fr;
+    LEFT_TRIGER_A.href = "pokedex.html?id=" + PREVIOUS_POKEMON_ID;
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
     ARROW.alt = "Left Arrow";
     LEFT_ICON.appendChild(ARROW);
     LEFT_ID.textContent =
-      "N° " + PREVIOUS_POKEMON_ID.toString().padStart(3, "0");
+      "N° " + PREVIOUS_POKEMON_ID.toString().padStart(4, "0");
     LEFT_NAME.textContent = PREVIOUS_POKEMON_NAME;
-    LEFT_TG_DETAILS.appendChild(LEFT_ICON);
-    LEFT_TG_DETAILS.appendChild(LEFT_ID);
-    LEFT_TG_DETAILS.appendChild(LEFT_NAME);
+    LEFT_TD.appendChild(LEFT_ICON);
+    LEFT_TD.appendChild(LEFT_ID);
+    LEFT_TD.appendChild(LEFT_NAME);
   }
 
   async function setRightTrigger(pokemonId, POKE_JSON) {
-    const RIGHT_TG_DETAILS = document.getElementById("right-tg-details");
-    const RIGHT_ICON = document.getElementById("right-tg-icon");
-    const RIGHT_ID = document.getElementById("right-tg-id");
-    const RIGHT_NAME = document.getElementById("right-tg-name");
-    const PREVIOUS_POKEMON_ID =
-      pokemonId === 1
-        ? (await getJson(TYRADEX_API + "pokemon")).length - 1
-        : pokemonId - 1;
-    const PREVIOUS_POKEMON_NAME = (
-      await getJson(TYRADEX_API + "pokemon/" + PREVIOUS_POKEMON_ID)
+    const RIGHT_TRIGER_A = document.getElementById("right-trigger-a");
+    const RIGHT_TD = document.getElementById("right-td");
+    const RIGHT_ICON = document.getElementById("right-td-icon");
+    const RIGHT_ID = document.getElementById("right-td-id");
+    const RIGHT_NAME = document.getElementById("right-td-name");
+    const NEXT_POKEMON_ID =
+      pokemonId === POKE_JSON.length - 1 ? 1 : pokemonId + 1;
+    const NEXT_POKEMON_NAME = (
+      await getJson(TYRADEX_API + "pokemon/" + NEXT_POKEMON_ID)
     ).name.fr;
+    RIGHT_TRIGER_A.href = "pokedex.html?id=" + NEXT_POKEMON_ID;
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
     ARROW.alt = "Left Arrow";
     RIGHT_ICON.appendChild(ARROW);
-    RIGHT_ID.textContent =
-      "N° " + PREVIOUS_POKEMON_ID.toString().padStart(3, "0");
-    RIGHT_NAME.textContent = PREVIOUS_POKEMON_NAME;
-    RIGHT_TG_DETAILS.appendChild(RIGHT_ICON);
-    RIGHT_TG_DETAILS.appendChild(RIGHT_ID);
-    RIGHT_TG_DETAILS.appendChild(RIGHT_NAME);
+    RIGHT_ID.textContent = "N° " + NEXT_POKEMON_ID.toString().padStart(4, "0");
+    RIGHT_NAME.textContent = NEXT_POKEMON_NAME;
+    RIGHT_TD.appendChild(RIGHT_ICON);
+    RIGHT_TD.appendChild(RIGHT_ID);
+    RIGHT_TD.appendChild(RIGHT_NAME);
   }
 
   setPokedex(POKEMON_ID);
