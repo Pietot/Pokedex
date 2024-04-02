@@ -104,6 +104,7 @@ a:hover {
 
 .types img {
   height: 70px;
+  -webkit-user-drag: none;
 }
 
 .types input[type="checkbox"]:checked + label img {
