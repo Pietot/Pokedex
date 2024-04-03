@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     parseInt(new URLSearchParams(window.location.search).get("id")) || 1;
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
   const POKE_API = "https://pokeapi.co/api/v2/pokemon-species/";
-  const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
+  const POKE_IMG_API =
+    "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const TYPE_TO_COLOR = {
     Normal: "#abacac",
     Feu: "#ff662e",
@@ -44,6 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setTitle(pokemonId, POKE_JSON);
       setLeftTrigger(pokemonId, POKE_JSON);
       setRightTrigger(pokemonId, POKE_JSON);
+      setPokeName(pokemonId, POKE_JSON);
+      setPokeImage(pokemonId, POKE_JSON);
+      setStats(pokemonId, POKE_JSON);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du pokémon :",
@@ -68,13 +72,18 @@ document.addEventListener("DOMContentLoaded", () => {
       pokemonId === 1 ? POKE_JSON.length - 1 : pokemonId - 1;
     const PREVIOUS_POKEMON_NAME = POKE_JSON[PREVIOUS_POKEMON_ID].name.fr;
     LEFT_TRIGGER_A.href = "pokedex.html?id=" + PREVIOUS_POKEMON_ID;
-    LEFT_TRIGGER.style.transition = "background-color 0.5s ease";
+    LEFT_TRIGGER.style.transition =
+      "transform 0.2s ease, background-color 0.5s ease";
     LEFT_TRIGGER.addEventListener("mouseenter", () => {
       LEFT_TRIGGER.style.backgroundColor =
         TYPE_TO_COLOR[POKE_JSON[PREVIOUS_POKEMON_ID].types[0].name];
     });
     LEFT_TRIGGER.addEventListener("mouseleave", () => {
       LEFT_TRIGGER.style.backgroundColor = "transparent";
+      LEFT_TRIGGER.style.transform = "";
+    });
+    LEFT_TRIGGER.addEventListener("mousedown", () => {
+      LEFT_TRIGGER.style.transform = "translateY(10px)";
     });
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
@@ -99,13 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
       pokemonId === POKE_JSON.length - 1 ? 1 : pokemonId + 1;
     const NEXT_POKEMON_NAME = POKE_JSON[NEXT_POKEMON_ID].name.fr;
     RIGHT_TRIGER_A.href = "pokedex.html?id=" + NEXT_POKEMON_ID;
-    RIGHT_TRIGGER.style.transition = "background-color 0.5s ease";
+    RIGHT_TRIGGER.style.transition =
+      "background-color 0.5s ease, transform 0.2s ease";
     RIGHT_TRIGGER.addEventListener("mouseenter", () => {
       RIGHT_TRIGGER.style.backgroundColor =
         TYPE_TO_COLOR[POKE_JSON[NEXT_POKEMON_ID].types[0].name];
     });
     RIGHT_TRIGGER.addEventListener("mouseleave", () => {
       RIGHT_TRIGGER.style.backgroundColor = "transparent";
+      RIGHT_TRIGGER.style.transform = "";
+    });
+    RIGHT_TRIGGER.addEventListener("mousedown", () => {
+      RIGHT_TRIGGER.style.transform = "translateY(10px)";
     });
     const ARROW = document.createElement("img");
     ARROW.src = "img/arrow.png";
@@ -116,6 +130,50 @@ document.addEventListener("DOMContentLoaded", () => {
     RIGHT_TD.appendChild(RIGHT_ICON);
     RIGHT_TD.appendChild(RIGHT_ID);
     RIGHT_TD.appendChild(RIGHT_NAME);
+  }
+
+  function setPokeName(pokemonId, POKE_JSON) {
+    const POKE_ID = document.getElementById("poke-id");
+    POKE_ID.textContent = "N° " + pokemonId.toString().padStart(4, "0");
+    const POKE_NAME = document.getElementById("poke-name");
+    POKE_NAME.textContent = POKE_JSON[pokemonId].name.fr;
+  }
+
+  function setPokeImage(pokemonId, POKE_JSON) {
+    const POKE_IMG = document.getElementById("poke-img");
+    POKE_IMG.src =
+      POKE_IMG_API + pokemonId.toString().padStart(3, "0") + ".png";
+    POKE_IMG.alt = "Image de " + POKE_JSON[pokemonId].name.fr;
+  }
+
+  function setStats(pokemonId, POKE_JSON) {
+    const COLOR = TYPE_TO_COLOR[POKE_JSON[pokemonId].types[0].name];
+    const LIGHTEN_COLOR = lightenColor(COLOR, 20);
+    ["hp", "atk", "def", "spe_atk", "spe_def", "vit"].forEach((stat) => {
+      const POKE_STAT = POKE_JSON[pokemonId].stats[stat];
+      const PERCENTAGE = Math.round((POKE_STAT / 255) * 100);
+      const STAT = document.getElementById("stat-" + stat);
+      STAT.style.background = `linear-gradient(to right, ${LIGHTEN_COLOR}, ${COLOR} ${PERCENTAGE}%, white 0%)`;
+      const STAT_VALUE = document.getElementById("value-" + stat);
+      STAT_VALUE.textContent = POKE_STAT;
+    });
+  }
+
+  function lightenColor(color, percent) {
+    // Convertir la couleur hexadécimale en valeurs RGB
+    const NUM = parseInt(color.slice(1), 16);
+    const AMOUNT = Math.round(2.55 * percent);
+    let r = (NUM >> 16) + AMOUNT;
+    let g = (NUM & 0x0000ff) + AMOUNT;
+    let b = ((NUM >> 8) & 0x00ff) + AMOUNT;
+
+    // Limiter les valeurs RGB entre 0 et 255
+    r = Math.min(255, Math.max(0, r));
+    g = Math.min(255, Math.max(0, g));
+    b = Math.min(255, Math.max(0, b));
+
+    // Convertir les valeurs RGB modifiées en une nouvelle couleur hexadécimale
+    return "#" + (g | (b << 8) | (r << 16)).toString(16);
   }
 
   setPokedex(POKEMON_ID);

@@ -5,6 +5,12 @@ body {
   justify-content: center;
   background-color: #535353;
 }
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
 .container {
   background-color: white;
   width: 1100px;
@@ -50,11 +56,6 @@ body {
   border: solid 2px black;
   border-radius: 100% 20px 20px 20px;
   cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.left-trigger:active {
-  transform: translateY(10px);
 }
 
 #right-td {
@@ -71,15 +72,6 @@ body {
   border: solid 2px black;
   border-radius: 20px 100% 20px 20px;
   cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.right-trigger:hover {
-  transition: transform 0.2 ease;
-}
-
-.right-trigger:active {
-  transform: translateY(10px);
 }
 
 .td-icon {
@@ -119,4 +111,119 @@ body {
   font-weight: bold;
   display: flex;
   justify-content: center;
+}
+
+.poke-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 2em;
+}
+
+.poke-details {
+  height: 71.5%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.left-container,
+.right-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.poke-image {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.poke-image img {
+  width: 100%;
+  background-color: #f2f2f2;
+  border-radius: 5%;
+}
+
+.stats-div {
+  margin-top: 50px;
+  width: 90%;
+  height: 30%;
+  background-color: #a4a4a4;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-div p {
+  margin-top: 20px;
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #000000;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.stats-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.stats-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 25%;
+  height: 100%;
+}
+
+.stats-name p,
+.stats-value p {
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #000000;
+  font-size: 1em;
+  font-weight: bold;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.stats {
+  height: 100%;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 5%;
+}
+
+.stats-value {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 15%;
+  height: 100%;
+}
+
+#stat-pv {
+  background: linear-gradient(to right, rgb(255, 113, 113), red 60%, white 30%);
 }

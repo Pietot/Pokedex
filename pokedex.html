@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/pokedex.css" />
     <link rel="icon" href="img/favicon.ico" />
-    <title>My Pokédex</title>
+    <title>&lrm;</title>
   </head>
   <body>
     <div class="container" id="container">
@@ -28,6 +28,47 @@
             </div>
           </div>
         </a>
+      </div>
+      <div class="poke-title">
+        <div class="poke-id" id="poke-id"></div>
+        <div class="poke-name" id="poke-name"></div>
+      </div>
+      <div class="poke-details">
+        <div class="left-container">
+          <div class="poke-image">
+            <img src="" alt="" id="poke-img" />
+          </div>
+          <div class="stats-div">
+            <p>Stats :</p>
+            <div class="stats-container">
+              <div class="stats-name">
+                <p>PV :</p>
+                <p>Attaque :</p>
+                <p>Défense :</p>
+                <p>Attaque Spé :</p>
+                <p>Défense Spé :</p>
+                <p>Vitesse :</p>
+              </div>
+              <div class="stats" id="stats">
+                <div class="stat" id="stat-hp"></div>
+                <div class="stat" id="stat-atk"></div>
+                <div class="stat" id="stat-def"></div>
+                <div class="stat" id="stat-spe_atk"></div>
+                <div class="stat" id="stat-spe_def"></div>
+                <div class="stat" id="stat-vit"></div>
+              </div>
+              <div class="stats-value">
+                <p id="value-hp"></p>
+                <p id="value-atk"></p>
+                <p id="value-def"></p>
+                <p id="value-spe_atk"></p>
+                <p id="value-spe_def"></p>
+                <p id="value-vit"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-container"></div>
       </div>
     </div>
     <script src="js/pokedex.js"></script>
