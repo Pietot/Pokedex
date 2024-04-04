@@ -140,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const checkedGenerations = Array.from(
         document.querySelectorAll('.generation input[type="checkbox"]:checked')
       );
-      console.log(checkedGenerations);
       const pokeCards = Array.from(
         document.getElementsByClassName("poke-card")
       );

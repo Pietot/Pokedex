@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  var viewportHeight = window.innerHeight;
-  container = document.getElementById("container");
-  container.style.height = viewportHeight + "px";
   const POKEMON_ID =
     parseInt(new URLSearchParams(window.location.search).get("id")) || 1;
   const TYRADEX_API = "https://tyradex.tech/api/v1/";
@@ -42,12 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
   async function setPokedex(pokemonId) {
     try {
       const POKE_JSON = await getJson(TYRADEX_API + "pokemon");
-      setTitle(pokemonId, POKE_JSON);
+      setTitle(POKE_JSON[pokemonId]);
       setLeftTrigger(pokemonId, POKE_JSON);
       setRightTrigger(pokemonId, POKE_JSON);
-      setPokeName(pokemonId, POKE_JSON);
-      setPokeImage(pokemonId, POKE_JSON);
+      setPokeName(pokemonId, POKE_JSON[pokemonId]);
+      setPokeImage(pokemonId, POKE_JSON[pokemonId]);
       setStats(pokemonId, POKE_JSON);
+      setDescription(pokemonId);
+      setInfo(POKE_JSON[pokemonId]);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du pokémon :",
@@ -56,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function setTitle(pokemonId, POKE_JSON) {
-    const NAME = POKE_JSON[pokemonId].name.fr;
+  function setTitle(pokeJson) {
+    const NAME = pokeJson.name.fr;
     document.title = NAME;
   }
 
@@ -132,18 +131,18 @@ document.addEventListener("DOMContentLoaded", () => {
     RIGHT_TD.appendChild(RIGHT_NAME);
   }
 
-  function setPokeName(pokemonId, POKE_JSON) {
+  function setPokeName(pokemonId, pokeJson) {
     const POKE_ID = document.getElementById("poke-id");
     POKE_ID.textContent = "N° " + pokemonId.toString().padStart(4, "0");
     const POKE_NAME = document.getElementById("poke-name");
-    POKE_NAME.textContent = POKE_JSON[pokemonId].name.fr;
+    POKE_NAME.textContent = pokeJson.name.fr;
   }
 
-  function setPokeImage(pokemonId, POKE_JSON) {
+  function setPokeImage(pokemonId, pokeJson) {
     const POKE_IMG = document.getElementById("poke-img");
     POKE_IMG.src =
       POKE_IMG_API + pokemonId.toString().padStart(3, "0") + ".png";
-    POKE_IMG.alt = "Image de " + POKE_JSON[pokemonId].name.fr;
+    POKE_IMG.alt = "Image de " + pokeJson.name.fr;
   }
 
   function setStats(pokemonId, POKE_JSON) {
@@ -174,6 +173,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Convertir les valeurs RGB modifiées en une nouvelle couleur hexadécimale
     return "#" + (g | (b << 8) | (r << 16)).toString(16);
+  }
+
+  async function setDescription(pokemonId) {
+    const DESC_P = document.getElementById("description");
+    const DESCRIPTION = (
+      await getJson(POKE_API + pokemonId)
+    ).flavor_text_entries.find(
+      (entry) => entry.language.name === "fr"
+    ).flavor_text;
+    DESC_P.textContent = DESCRIPTION;
+  }
+
+  function setInfo(pokeJson) {
+    const INFOS = document.getElementById("infos");
+    if (pokeJson.types.length > 1) {
+      const COLOR1 = TYPE_TO_COLOR[pokeJson.types[0].name];
+      const COLOR2 = TYPE_TO_COLOR[pokeJson.types[1].name];
+      INFOS.style.background = `linear-gradient(120deg, ${COLOR1}, ${COLOR2})`;
+    } else {
+      const COLOR = TYPE_TO_COLOR[pokeJson.types[0].name];
+      INFOS.style.backgroundColor = COLOR;
+    }
+    const HEIGHT = document.getElementById("height");
+    HEIGHT.textContent = pokeJson.height;
+    const WEIGHT = document.getElementById("weight");
+    WEIGHT.textContent = pokeJson.weight;
   }
 
   setPokedex(POKEMON_ID);
