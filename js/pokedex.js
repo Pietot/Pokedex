@@ -199,6 +199,33 @@ document.addEventListener("DOMContentLoaded", () => {
     HEIGHT.textContent = pokeJson.height;
     const WEIGHT = document.getElementById("weight");
     WEIGHT.textContent = pokeJson.weight;
+    const CATEGORY = document.getElementById("category");
+    CATEGORY.textContent = pokeJson.category;
+    const ABILITIES = document.getElementById("abilities");
+    pokeJson.talents.forEach((ability) => {
+      if (ability.tc === false) {
+        const ABILITY = document.createElement("p");
+        ABILITY.className = "info-value";
+        ABILITY.textContent = ability.name;
+        ABILITIES.appendChild(ABILITY);
+      }
+    });
+    const SEXE_INFO = document.getElementById("sexe-info");
+    try {
+      const BOY_RATIO = pokeJson.sexe.male;
+      const FEMALE_RATIO = 100 - pokeJson.sexe.female;
+      const SEXE_RATIO = document.createElement("div");
+      SEXE_RATIO.className = "sexe-ratio";
+      SEXE_INFO.id = "sexe-ratio";
+      SEXE_RATIO.style.background = `linear-gradient(to right, blue ${BOY_RATIO}%, deeppink ${FEMALE_RATIO}%)`;
+      SEXE_INFO.appendChild(SEXE_RATIO);
+    } catch (error) {
+      const ASEXUEL = document.createElement("p");
+      ASEXUEL.className = "info-value";
+      ASEXUEL.id = "sexe";
+      ASEXUEL.textContent = "Asexué";
+      SEXE_INFO.appendChild(ASEXUEL);
+    }
   }
 
   setPokedex(POKEMON_ID);

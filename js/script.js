@@ -289,14 +289,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function setSearchBar() {
     const searchInput = document.getElementById("search-bar");
     searchInput.addEventListener("input", () => {
-      const searchValue = searchInput.value.toLowerCase();
+      const searchValue = searchInput.value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
       const pokeCards = document.getElementsByClassName("poke-card");
       for (let i = 0; i < pokeCards.length; i++) {
         const pokeCard = pokeCards[i];
         const pokeCardName = pokeCard
           .getElementsByClassName("poke-card-name")[0]
           .getElementsByTagName("p")[0]
-          .textContent.toLowerCase();
+          .textContent.toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
         const pokeCardId =
           pokeCard.getElementsByClassName("poke-card-id")[0].textContent;
         if (

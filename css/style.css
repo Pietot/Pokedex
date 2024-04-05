@@ -9,7 +9,7 @@ label {
 }
 
 input {
-  cursor: pointer;
+  cursor:text;
 }
 
 a:hover {
