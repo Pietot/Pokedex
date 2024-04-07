@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setStats(pokemonId, POKE_JSON);
       setDescription(pokemonId);
       setInfo(POKE_JSON[pokemonId]);
+      setTypesMultipliers(POKE_JSON[pokemonId]);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du pokémon :",
@@ -226,6 +227,43 @@ document.addEventListener("DOMContentLoaded", () => {
       ASEXUEL.textContent = "Asexué";
       SEXE_INFO.appendChild(ASEXUEL);
     }
+  }
+
+  function setTypesMultipliers(pokeJson) {
+    const POKE_TYPES = document.getElementById("poke-types");
+    const POKE_WEAKNESSES = document.getElementById("poke-weaknesses");
+    const POKE_RESISTANCES = document.getElementById("poke-resistances");
+    const MULTIPLIERS = pokeJson.resistances.filter(
+      (item) => item.multiplier !== 1
+    );
+    MULTIPLIERS.sort((a, b) => b.multiplier - a.multiplier);
+    console.log(MULTIPLIERS);
+    pokeJson.types.forEach((element) => {
+      const TYPE = document.createElement("div");
+      TYPE.className = "type";
+      TYPE.style.backgroundColor = TYPE_TO_COLOR[element.name];
+      const TYPE_NAME = document.createElement("p");
+      TYPE_NAME.textContent = element.name;
+      TYPE.appendChild(TYPE_NAME);
+      POKE_TYPES.appendChild(TYPE);
+    });
+    MULTIPLIERS.forEach((element) => {
+      const MULTIPLIER = document.createElement("div");
+      MULTIPLIER.className = "type";
+      MULTIPLIER.style.backgroundColor = TYPE_TO_COLOR[element.name];
+      const MULTIPLIER_NAME = document.createElement("p");
+      MULTIPLIER_NAME.textContent = element.name;
+      const MULTIPLIER_VALUE = document.createElement("p");
+      MULTIPLIER_VALUE.textContent = "x" + element.multiplier;
+      MULTIPLIER.appendChild(MULTIPLIER_NAME);
+      MULTIPLIER.appendChild(MULTIPLIER_VALUE);
+      console.log(element.multiplier);
+      if (element.multiplier < 1) {
+        POKE_RESISTANCES.appendChild(MULTIPLIER);
+      } else {
+        POKE_WEAKNESSES.appendChild(MULTIPLIER);
+      }
+    });
   }
 
   setPokedex(POKEMON_ID);
