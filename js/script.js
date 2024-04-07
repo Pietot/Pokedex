@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       typeLabel.htmlFor = TYPE_NAME.toLowerCase();
       typeLabel.style.borderColor = TYPE_TO_COLOR[TYPE_NAME];
       const typeImage = document.createElement("img");
-      typeImage.src = "img/icons/" + TYPE_NAME + ".png";
+      typeImage.src = "img/icons/" + TYPE_NAME.toLowerCase() + ".png";
       typeImage.alt = TYPE_NAME;
       typeLabel.appendChild(typeImage);
       typesFilter.appendChild(typeInput);
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const divP = document.createElement("div");
       divP.className = "type-name";
       const typeImage = document.createElement("img");
-      typeImage.src = "img/icons/" + pokeTypes[i].name + ".png";
+      typeImage.src = "img/icons/" + pokeTypes[i].name.toLowerCase() + ".png";
       typeImage.alt = pokeTypes[i].name;
       const pElement = document.createElement("p");
       pElement.textContent = pokeTypes[i].name;
