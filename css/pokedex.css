@@ -12,7 +12,7 @@ p {
 }
 
 .container {
-  width: 1100px;
+  width: 1300px;
 }
 
 .triggers {
@@ -23,9 +23,10 @@ p {
   align-items: center;
 }
 
-.triggers a {
+#left-trigger-a,
+#right-trigger-a {
   text-decoration: none;
-  width: 45%;
+  width: 40%;
   height: 90%;
 }
 
@@ -55,6 +56,34 @@ p {
   border: solid 2px black;
   border-radius: 100% 20px 20px 20px;
   cursor: pointer;
+}
+
+#middle-trigger-a {
+  width: 10%;
+  height: 70%;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+#middle-trigger-a:active {
+  transform: translateY(10px);
+}
+
+.middle-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px 20px 20px 20px;
+  border: solid 2px black;
+  cursor: pointer;
+  transition: background-color 0.2s ease; /* Correction ici */
+}
+
+.middle-trigger:hover {
+  background-color: #a0a0a0;
 }
 
 #right-td {
@@ -127,11 +156,11 @@ p {
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .left-container {
-  width: 50%;
+  width: 40%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -235,7 +264,9 @@ p {
 
 .description {
   width: 100%;
-  height: 20%;
+  height: 15%;
+  display: flex;
+  align-items: center;
 }
 
 .description p {
@@ -289,4 +320,79 @@ p {
   height: 10px;
   width: 80%;
   background-color: #fff;
+}
+
+.multipliers-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 55%;
+}
+
+.multiplier {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.multiplier-title {
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #000000;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.multiplier-types {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+}
+
+.type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 70%;
+  border-radius: 10px;
+}
+
+.type p {
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.evolutions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 70%;
+  background-color: #616161;
+}
+.evolutions-title {
+  height: 15%;
+  width: 95%;
+  display: flex;
+}
+
+.evolutions-title p {
+  height: 100%;
+  width: 100%;
+  font-family: "Flexo-Bold", arial, sans-serif;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }

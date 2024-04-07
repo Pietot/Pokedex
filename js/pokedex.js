@@ -39,15 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
   async function setPokedex(pokemonId) {
     try {
       const POKE_JSON = await getJson(TYRADEX_API + "pokemon");
-      setTitle(POKE_JSON[pokemonId]);
+      const POKEMON_INFO = POKE_JSON[pokemonId];
+      setTitle(POKEMON_INFO);
       setLeftTrigger(pokemonId, POKE_JSON);
       setRightTrigger(pokemonId, POKE_JSON);
-      setPokeName(pokemonId, POKE_JSON[pokemonId]);
-      setPokeImage(pokemonId, POKE_JSON[pokemonId]);
+      setPokeName(pokemonId, POKEMON_INFO);
+      setPokeImage(pokemonId, POKEMON_INFO);
       setStats(pokemonId, POKE_JSON);
       setDescription(pokemonId);
-      setInfo(POKE_JSON[pokemonId]);
-      setTypesMultipliers(POKE_JSON[pokemonId]);
+      setInfo(POKEMON_INFO);
+      setTypesMultipliers(POKEMON_INFO);
+      setEvolution(POKEMON_INFO);
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du pokémon :",
@@ -264,6 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
         POKE_WEAKNESSES.appendChild(MULTIPLIER);
       }
     });
+  }
+
+  function setEvolution(pokeJson) {
+    
   }
 
   setPokedex(POKEMON_ID);
