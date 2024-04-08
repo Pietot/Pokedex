@@ -239,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
       (item) => item.multiplier !== 1
     );
     MULTIPLIERS.sort((a, b) => b.multiplier - a.multiplier);
-    console.log(MULTIPLIERS);
     pokeJson.types.forEach((element) => {
       const TYPE = document.createElement("div");
       TYPE.className = "type";
@@ -259,7 +258,6 @@ document.addEventListener("DOMContentLoaded", () => {
       MULTIPLIER_VALUE.textContent = "x" + element.multiplier;
       MULTIPLIER.appendChild(MULTIPLIER_NAME);
       MULTIPLIER.appendChild(MULTIPLIER_VALUE);
-      console.log(element.multiplier);
       if (element.multiplier < 1) {
         POKE_RESISTANCES.appendChild(MULTIPLIER);
       } else {
@@ -268,8 +266,82 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function setEvolution(pokeJson) {
-    
+  async function setEvolution(pokeJson) {
+    const EVOLUTIONS = document.getElementById("evolutions");
+
+    if (pokeJson.evolution === null) {
+      const EVOLUTION_P = document.getElementById("evolution-p");
+      EVOLUTION_P.textContent = "Ce Pokémon n'évolue pas.";
+      await createEvolution(pokeJson);
+    } else {
+      if (pokeJson.evolution.pre !== null) {
+        const preEvolutionPromises =
+          pokeJson.evolution.pre.map(createEvolution);
+        const preEvolutions = await Promise.all(preEvolutionPromises);
+        preEvolutions.forEach((evolution) => {
+          EVOLUTIONS.appendChild(evolution);
+        });
+      }
+
+      const currentPokemonPromise = createEvolution(pokeJson, true);
+      const nextEvolutionPromises =
+        pokeJson.evolution.next !== null
+          ? pokeJson.evolution.next.map(createEvolution)
+          : [];
+
+      const currentPokemonCard = await currentPokemonPromise;
+      const nextEvolutions = await Promise.all(nextEvolutionPromises);
+
+      EVOLUTIONS.appendChild(currentPokemonCard);
+      nextEvolutions.forEach((evolution) => {
+        EVOLUTIONS.appendChild(evolution);
+      });
+    }
+  }
+
+  async function createEvolution(evolutionData) {
+    const EVOLUTION_DIV = document.createElement("div");
+    EVOLUTION_DIV.className = "evolution";
+    const IMG_A = document.createElement("a");
+    IMG_A.href = "pokedex.html?id=" + evolutionData.pokedex_id;
+    const IMG_DIV = document.createElement("div");
+    IMG_DIV.className = "evolution-img";
+    const EVOLUTION_IMG = document.createElement("img");
+    EVOLUTION_IMG.src =
+      POKE_IMG_API +
+      evolutionData.pokedex_id.toString().padStart(3, "0") +
+      ".png";
+    EVOLUTION_IMG.alt =
+      "Image de " + (evolutionData.name.fr || evolutionData.name);
+    IMG_DIV.appendChild(EVOLUTION_IMG);
+    IMG_A.appendChild(IMG_DIV);
+    EVOLUTION_DIV.appendChild(IMG_A);
+    const NAME = document.createElement("p");
+    NAME.textContent = evolutionData.name.fr || evolutionData.name;
+    NAME.className = "evolution-name";
+    EVOLUTION_DIV.appendChild(NAME);
+    const ID = document.createElement("p");
+    ID.textContent =
+      "N° " + evolutionData.pokedex_id.toString().padStart(4, "0");
+    ID.className = "evolution-id";
+    EVOLUTION_DIV.appendChild(ID);
+    const TYPES = document.createElement("div");
+    TYPES.className = "evolution-types";
+    const POKE_TYPES = (
+      await getJson(TYRADEX_API + "pokemon/" + evolutionData.pokedex_id)
+    ).types;
+    POKE_TYPES.forEach((element) => {
+      const TYPE = document.createElement("div");
+      TYPE.className = "evolution-type";
+      TYPE.style.backgroundColor = TYPE_TO_COLOR[element.name];
+      const TYPE_NAME = document.createElement("p");
+      TYPE_NAME.textContent = element.name;
+      TYPE.appendChild(TYPE_NAME);
+      TYPES.appendChild(TYPE);
+      EVOLUTION_DIV.appendChild(TYPES);
+    });
+
+    return EVOLUTION_DIV;
   }
 
   setPokedex(POKEMON_ID);
