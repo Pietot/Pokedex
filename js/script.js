@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const TYRADEX_API = "https://tyradex.tech/api/v1/";
+  // Defining constants used several times in the script.
+  const TYRADEX_API = "https://tyradex.tech/api/v1/pokemon";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
   const CHECKBOXES = document.querySelectorAll('input[name="selection"]');
@@ -25,12 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
     Fée: "#ffb5ff",
   };
 
+  // Function to set the filters (search bar, types and generation).
   function setFilters() {
     setTypesBar();
     setTypesFilter();
     setGenerationFilter();
   }
 
+  // Function to set the bar with all types to filter.
   function setTypesBar() {
     const typesFilter = document.getElementById("types");
     for (const TYPE_NAME in TYPE_TO_COLOR) {
@@ -49,13 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set the addEventListener to all types.
   function setTypesFilter() {
     const typesFilter = document.getElementById("types");
     const exactly = document.getElementById("exactly");
     const only = document.getElementById("only");
+    // Event listener to filter the pokemons by types when a type is added or deleted.
     typesFilter.addEventListener("change", filter);
     exactly.addEventListener("change", filter);
     only.addEventListener("change", filter);
+    // Function to filter the pokemons by types.
     function filter() {
       const checkedTypes = Array.from(
         document.querySelectorAll('.types input[type="checkbox"]:checked')
@@ -63,20 +69,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const pokeCards = Array.from(
         document.getElementsByClassName("poke-card")
       );
+      // If no type is checked, all pokemons are displayed.
       if (checkedTypes.length === 0) {
         pokeCards.forEach((pokeCard) => (pokeCard.style.display = "block"));
         return;
       }
+      // If the "exactly" checkbox is checked, only the pokemons with the exact same types are displayed.
       if (exactly.checked) {
         pokeCards.forEach((pokeCard) => {
+          // Extracting the types of the pokemon's card.
           const pokeCardTypes = Array.from(
             pokeCard.querySelectorAll(".type-name p")
           ).map((p) => p.textContent.toLowerCase());
+          // If the types of the pokemon's card are the same as the checked types, the pokemon is displayed.
+          // Using JSON.stringify to compare the arrays because we can't compare arrays in JavaScript (bad language).
           JSON.stringify(pokeCardTypes) ===
           JSON.stringify(checkedTypes.map((type) => type.id))
             ? (pokeCard.style.display = "block")
             : (pokeCard.style.display = "none");
         });
+        // If the "only" checkbox is checked, only the pokemons with all their types selected are displayed.
       } else if (only.checked) {
         const pokeCards = document.querySelectorAll(".poke-card");
         pokeCards.forEach((pokeCard) => {
@@ -87,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? (pokeCard.style.display = "block")
             : (pokeCard.style.display = "none");
         });
+        // If the "exactly" and "only" checkboxes are not checked, the pokemons with at least one of the selected types are displayed.
       } else {
         pokeCards.forEach((pokeCard) => {
           const pokeCardTypes = Array.from(
@@ -103,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             : "none";
         });
       }
+      // Function to filter the pokemons by types when the "only" checkbox is checked.
       function filterOnly(pokeCard, checkedTypes) {
         const pokeCardTypes = Array.from(
           pokeCard.querySelectorAll(".type-name p")
@@ -112,9 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set the generation filter.
   async function setGenerationFilter() {
     try {
-      const ALL_POKEMONS = await getJson(TYRADEX_API + "pokemon");
+      const ALL_POKEMONS = await getJson(TYRADEX_API);
       const LAST_GENERATION = ALL_POKEMONS[ALL_POKEMONS.length - 1].generation;
       const generationFilter = document.getElementById("generations-filter");
       for (let i = 1; i <= LAST_GENERATION; i++) {
@@ -136,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Erreur lors de la récupération des pokémons :", error);
     }
+    // Function to filter the pokemons by generation.
     function filter() {
       const checkedGenerations = Array.from(
         document.querySelectorAll('.generation input[type="checkbox"]:checked')
@@ -143,12 +159,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const pokeCards = Array.from(
         document.getElementsByClassName("poke-card")
       );
+      // If no generation is checked, all pokemons are displayed.
       if (checkedGenerations.length === 0) {
         pokeCards.forEach((pokeCard) => (pokeCard.style.display = "block"));
         return;
       }
+      // For each pokemon, only the pokemons with their generation checked are displayed.
       pokeCards.forEach((pokeCard) => {
-        const pokeCardGeneration = pokeCard.querySelector("a").value;
+        const pokeCardGeneration = pokeCard
+          .querySelector("a")
+          .getAttribute("generation");
         pokeCard.style.display = checkedGenerations.some(
           (generation) => generation.value == pokeCardGeneration
         )
@@ -158,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set the checkboxes to be exclusive, meaning that if a checkboxe is checked while another one is already checked, the old one is automatically unchecked.
   function setCheckboxes() {
     CHECKBOXES.forEach(function (checkbox) {
       checkbox.addEventListener("change", function () {
@@ -170,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to get the JSON from an API.
   async function getJson(url) {
     try {
       const response = await fetch(url);
@@ -180,11 +202,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function setPokeCards(generation = 0) {
+  // Function to set the pokemons cards.
+  async function setPokeCards() {
     try {
-      const call = generation === 0 ? "pokemon" : `gen/${generation}`;
-      const POKE_JSON = await getJson(TYRADEX_API + call);
+      const POKE_JSON = await getJson(TYRADEX_API);
       POKE_JSON.forEach((pokeInfo, pokeJsonIndex) => {
+        // If the pokemon is not MissingNo., we create a card for it.
+        // We skip MissingNo. because it's not a real pokemon and it cause issues since all his attributes are null.
         if (pokeInfo.name.fr !== "MissingNo.") {
           const pokeId = pokeInfo.pokedex_id;
           const pokeTypes = pokeInfo.types;
@@ -202,13 +226,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to create a pokemon card.
   function createPokeCard(pokemonId, pokeTypes, generation) {
     const newDiv = document.createElement("div");
     newDiv.className = "col-xs-6 col-sm-5 col-md-3 poke-card";
     const newA = document.createElement("a");
     newA.href = "pokedex.html?id=" + pokemonId.toString();
     newA.className = "link";
-    newA.value = generation;
+    // Adding the generation attribute to the card.
+    newA.setAttribute("generation", generation);
     const divItems = document.createElement("div");
     divItems.className = "items";
     divItems.id = "poke-card-" + pokemonId.toString();
@@ -228,6 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return divItems;
   }
 
+  // Function to set the pokemon image.
   function setPokeImage(pokemonId, formattedId) {
     const SPRITE = POKE_IMG + formattedId + ".png";
     const pokeCardElement = document.getElementById(
@@ -241,6 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pokeCardElement.appendChild(pokeCardImgDiv);
   }
 
+  // Function to set the pokemon index.
   function setIndex(pokemonId, divItems) {
     pokemonId = pokemonId.padStart(4, "0");
     const idElement = document.createElement("div");
@@ -251,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divItems.appendChild(idElement);
   }
 
+  // Function to set the pokemon name.
   function setName(POKE_JSON, divItems, pokemonId) {
     const nameElement = document.createElement("div");
     nameElement.className = "poke-card-name";
@@ -260,6 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divItems.appendChild(nameElement);
   }
 
+  // Function to set the pokemon types.
   function setTypes(divItems, pokeTypes) {
     const typesElement = document.createElement("div");
     typesElement.className = "poke-card-types";
@@ -286,9 +316,11 @@ document.addEventListener("DOMContentLoaded", () => {
     divItems.appendChild(typesElement);
   }
 
+  // Function to set the search bar.
   function setSearchBar() {
     const searchInput = document.getElementById("search-bar");
     searchInput.addEventListener("input", () => {
+      // We normalize the search value to avoid accents and case sensitivity.
       const searchValue = searchInput.value
         .toLowerCase()
         .normalize("NFD")
@@ -296,6 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const pokeCards = document.getElementsByClassName("poke-card");
       for (let i = 0; i < pokeCards.length; i++) {
         const pokeCard = pokeCards[i];
+        // We normalize the pokemon name to avoid accents and case sensitivity.
         const pokeCardName = pokeCard
           .getElementsByClassName("poke-card-name")[0]
           .getElementsByTagName("p")[0]
