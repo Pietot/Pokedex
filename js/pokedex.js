@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Defining constants used several times in the script.
+  // Getting the ID of the Pokémon from the URL, default value to 1.
   const POKEMON_ID =
     parseInt(new URLSearchParams(window.location.search).get("id")) || 1;
-  const TYRADEX_API = "https://tyradex.tech/api/v1/";
+  const TYRADEX_API = "https://tyradex.tech/api/v1/pokemon";
   const POKE_API = "https://pokeapi.co/api/v2/pokemon-species/";
   const POKE_IMG_API =
     "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
+
   const TYPE_TO_COLOR = {
     Normal: "#abacac",
     Feu: "#ff662e",
@@ -26,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Fée: "#ffb5ff",
   };
 
+  // Function to get the JSON from an API.
   async function getJson(url) {
     try {
       const response = await fetch(url);
@@ -36,9 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // The main function that will set the Pokedex.
   async function setPokedex(pokemonId) {
     try {
-      const POKE_JSON = await getJson(TYRADEX_API + "pokemon");
+      const POKE_JSON = await getJson(TYRADEX_API);
       const POKEMON_INFO = POKE_JSON[pokemonId];
       setTitle(POKEMON_INFO);
       setLeftTrigger(pokemonId, POKE_JSON);
@@ -58,11 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set the title of the page.
   function setTitle(pokeJson) {
     const NAME = pokeJson.name.fr;
     document.title = NAME;
   }
 
+  // Function to set the left trigger of the pokedex.
   function setLeftTrigger(pokemonId, POKE_JSON) {
     const LEFT_TRIGGER_A = document.getElementById("left-trigger-a");
     const LEFT_TRIGGER = document.getElementById("left-trigger");
@@ -70,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const LEFT_ICON = document.getElementById("left-td-icon");
     const LEFT_ID = document.getElementById("left-td-id");
     const LEFT_NAME = document.getElementById("left-td-name");
+    // If the Pokémon is the first of the list, the previous Pokemon is the last of the list.
     const PREVIOUS_POKEMON_ID =
       pokemonId === 1 ? POKE_JSON.length - 1 : pokemonId - 1;
     const PREVIOUS_POKEMON_NAME = POKE_JSON[PREVIOUS_POKEMON_ID].name.fr;
@@ -99,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     LEFT_TD.appendChild(LEFT_NAME);
   }
 
+  // Function to set the right trigger of the pokedex.
   function setRightTrigger(pokemonId, POKE_JSON) {
     const RIGHT_TRIGER_A = document.getElementById("right-trigger-a");
     const RIGHT_TRIGGER = document.getElementById("right-trigger");
@@ -106,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const RIGHT_ICON = document.getElementById("right-td-icon");
     const RIGHT_ID = document.getElementById("right-td-id");
     const RIGHT_NAME = document.getElementById("right-td-name");
+    // If the Pokémon is the last of the list, the next Pokemon is the first of the list.
     const NEXT_POKEMON_ID =
       pokemonId === POKE_JSON.length - 1 ? 1 : pokemonId + 1;
     const NEXT_POKEMON_NAME = POKE_JSON[NEXT_POKEMON_ID].name.fr;
@@ -134,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     RIGHT_TD.appendChild(RIGHT_NAME);
   }
 
+  // Function to set the name and the ID of the Pokémon.
   function setPokeName(pokemonId, pokeJson) {
     const POKE_ID = document.getElementById("poke-id");
     POKE_ID.textContent = "N° " + pokemonId.toString().padStart(4, "0");
@@ -141,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     POKE_NAME.textContent = pokeJson.name.fr;
   }
 
+  // Function to set the image of the Pokémon.
   function setPokeImage(pokemonId, pokeJson) {
     const POKE_IMG = document.getElementById("poke-img");
     POKE_IMG.src =
@@ -148,9 +160,11 @@ document.addEventListener("DOMContentLoaded", () => {
     POKE_IMG.alt = "Image de " + pokeJson.name.fr;
   }
 
+  // Function to set the stats of the Pokémon.
   function setStats(pokemonId, POKE_JSON) {
     const COLOR = TYPE_TO_COLOR[POKE_JSON[pokemonId].types[0].name];
     const LIGHTEN_COLOR = lightenColor(COLOR, 20);
+    console.log(LIGHTEN_COLOR);
     ["hp", "atk", "def", "spe_atk", "spe_def", "vit"].forEach((stat) => {
       const POKE_STAT = POKE_JSON[pokemonId].stats[stat];
       const PERCENTAGE = Math.round((POKE_STAT / 255) * 100);
@@ -161,23 +175,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to lighten a color.
   function lightenColor(color, percent) {
-    // Convertir la couleur hexadécimale en valeurs RGB
+    // Removing the "#" and convert the hexadecimal color to a number
     const NUM = parseInt(color.slice(1), 16);
+    // Calculating the amount of "white" to add to the RGB values
+    // 2.55 because 255 is the maximum value of a color (100%) and we want to add a percentage of it so 1% of 255 is 2.55
     const AMOUNT = Math.round(2.55 * percent);
+    // Didn't understand this part but thanks ChatGPT
     let r = (NUM >> 16) + AMOUNT;
     let g = (NUM & 0x0000ff) + AMOUNT;
     let b = ((NUM >> 8) & 0x00ff) + AMOUNT;
-
-    // Limiter les valeurs RGB entre 0 et 255
+    // Normalize the values to be between 0 and 255
     r = Math.min(255, Math.max(0, r));
     g = Math.min(255, Math.max(0, g));
     b = Math.min(255, Math.max(0, b));
-
-    // Convertir les valeurs RGB modifiées en une nouvelle couleur hexadécimale
+    // Converting the RGB values to hexadecimal and return the color
     return "#" + (g | (b << 8) | (r << 16)).toString(16);
   }
 
+  // Function to set the description of the Pokemon.
   async function setDescription(pokemonId) {
     const DESC_P = document.getElementById("description");
     const DESCRIPTION = (
@@ -188,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     DESC_P.textContent = DESCRIPTION;
   }
 
+  // Function to set the informations of the Pokemon.
   function setInfo(pokeJson) {
     const INFOS = document.getElementById("infos");
     if (pokeJson.types.length > 1) {
@@ -231,13 +249,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set the type, the weaknesses and the resistances of the pokemon.
   function setTypesMultipliers(pokeJson) {
     const POKE_TYPES = document.getElementById("poke-types");
     const POKE_WEAKNESSES = document.getElementById("poke-weaknesses");
     const POKE_RESISTANCES = document.getElementById("poke-resistances");
+    // Filter the multipliers that are not 1 (normal damage)
     const MULTIPLIERS = pokeJson.resistances.filter(
       (item) => item.multiplier !== 1
     );
+    // Sort the multipliers by the value of the multiplier in descending order (from the highest to the lowest)
     MULTIPLIERS.sort((a, b) => b.multiplier - a.multiplier);
     pokeJson.types.forEach((element) => {
       const TYPE = document.createElement("div");
@@ -266,32 +287,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to set the evolution of the Pokémon.
   async function setEvolution(pokeJson) {
     const EVOLUTIONS = document.getElementById("evolutions");
-
+    // If the Pokemon doesn't evolve, display a message.
     if (pokeJson.evolution === null) {
       const EVOLUTION_P = document.getElementById("evolution-p");
       EVOLUTION_P.textContent = "Ce Pokémon n'évolue pas.";
-      await createEvolution(pokeJson);
+      const currentPokemonCard = await createEvolution(pokeJson);
+      EVOLUTIONS.appendChild(currentPokemonCard);
+      // If the Pokemon evolves, display the pre-evolutions and the next evolutions.
     } else {
-      if (pokeJson.evolution.pre !== null) {
-        const preEvolutionPromises =
-          pokeJson.evolution.pre.map(createEvolution);
-        const preEvolutions = await Promise.all(preEvolutionPromises);
-        preEvolutions.forEach((evolution) => {
-          EVOLUTIONS.appendChild(evolution);
-        });
-      }
-
-      const currentPokemonPromise = createEvolution(pokeJson, true);
+      const preEvolutionPromises =
+        pokeJson.evolution.pre?.map(createEvolution) || [];
+      // Wait for all the pre-evolutions to be created before displaying them.
+      const preEvolutions = await Promise.all(preEvolutionPromises);
+      preEvolutions.forEach((evolution) => {
+        EVOLUTIONS.appendChild(evolution);
+      });
+      const currentPokemonCard = await createEvolution(pokeJson);
       const nextEvolutionPromises =
-        pokeJson.evolution.next !== null
-          ? pokeJson.evolution.next.map(createEvolution)
-          : [];
-
-      const currentPokemonCard = await currentPokemonPromise;
+        pokeJson.evolution.next?.map(createEvolution) || [];
+      // Wait for all the next-evolutions to be created before displaying them.
       const nextEvolutions = await Promise.all(nextEvolutionPromises);
-
       EVOLUTIONS.appendChild(currentPokemonCard);
       nextEvolutions.forEach((evolution) => {
         EVOLUTIONS.appendChild(evolution);
@@ -299,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to create the evolution card of a Pokemon.
   async function createEvolution(evolutionData) {
     const EVOLUTION_DIV = document.createElement("div");
     EVOLUTION_DIV.className = "evolution";
@@ -311,12 +330,14 @@ document.addEventListener("DOMContentLoaded", () => {
       POKE_IMG_API +
       evolutionData.pokedex_id.toString().padStart(3, "0") +
       ".png";
+    // First case is for current Pokemon, second case is for pre-evolutions and next-evolutions.
     EVOLUTION_IMG.alt =
       "Image de " + (evolutionData.name.fr || evolutionData.name);
     IMG_DIV.appendChild(EVOLUTION_IMG);
     IMG_A.appendChild(IMG_DIV);
     EVOLUTION_DIV.appendChild(IMG_A);
     const NAME = document.createElement("p");
+    // First case is for current Pokemon, second case is for pre-evolutions and next-evolutions.
     NAME.textContent = evolutionData.name.fr || evolutionData.name;
     NAME.className = "evolution-name";
     EVOLUTION_DIV.appendChild(NAME);
@@ -328,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const TYPES = document.createElement("div");
     TYPES.className = "evolution-types";
     const POKE_TYPES = (
-      await getJson(TYRADEX_API + "pokemon/" + evolutionData.pokedex_id)
+      await getJson(TYRADEX_API + "/" + evolutionData.pokedex_id)
     ).types;
     POKE_TYPES.forEach((element) => {
       const TYPE = document.createElement("div");
