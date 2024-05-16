@@ -8,7 +8,7 @@
 
 This **pokedex** allows you to see informations about most of the pokemons using online API like Tyradex.tech and PokeAPI.co.
 
-## Feature
+## Features
 
 - Simple and intuitive UI
 
