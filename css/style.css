@@ -9,7 +9,7 @@ label {
 }
 
 input {
-  cursor:text;
+  cursor: text;
 }
 
 a:hover {
@@ -104,7 +104,7 @@ img {
   align-items: center;
   cursor: pointer;
   height: 60px;
-  aspect-ratio: 1/1;
+  width: 60px;
   border-radius: 100%;
 }
 
@@ -113,21 +113,21 @@ img {
   -webkit-user-drag: none;
 }
 
-.types input[type="checkbox"]:checked + label img {
+.types input[type="checkbox"]:checked+label img {
   filter: grayscale(0%);
   transition: filter 0.2s ease;
 }
 
-.types input[type="checkbox"]:not(:checked) + label img {
+.types input[type="checkbox"]:not(:checked)+label img {
   filter: grayscale(100%);
   transition: filter 0.2s ease;
 }
 
-.types input[type="checkbox"]:not(:checked) + label {
+.types input[type="checkbox"]:not(:checked)+label {
   border: 5px transparent;
 }
 
-.types input[type="checkbox"]:checked + label {
+.types input[type="checkbox"]:checked+label {
   border: 5px solid;
 }
 
@@ -319,15 +319,19 @@ button[type="submit"]:focus {
 }
 
 @media screen and (max-width: 767px) {
+
   .poke-card-id p,
   .type p {
     font-size: 2vw;
   }
+
   .poke-card-name p {
     font-size: 3vw;
   }
 }
+
 @media screen and (max-width: 575px) {
+
   .poke-card-id p,
   .type p {
     font-size: 4vw;
