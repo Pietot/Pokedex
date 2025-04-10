@@ -6,7 +6,7 @@
     <img src="img/logo.png" alt="Icon" width="300" />
 </p>
 
-This **pokedex** allows you to see informations about most of the pokemons using online API like Tyradex.tech and PokeAPI.co.
+This **pokedex** allows you to see informations about most of the pokemons using online API like tyradex.app and PokeAPI.co.
 
 ## Features
 
@@ -26,10 +26,9 @@ This **pokedex** allows you to see informations about most of the pokemons using
 
 > **Note**: <br>There is no mega evolutions and forms. <br> Filters are not cumulative.
 
-
 ## API
 
-**Tyradex.tech** is a french pokemon API that I used over PokeAPI.co. Here's why:
+**tyradex.app** is a french pokemon API that I used over PokeAPI.co. Here's why:
 
 - All the data is in french (and i'm French ^^)
 
@@ -39,9 +38,9 @@ This **pokedex** allows you to see informations about most of the pokemons using
 
 For my case, I just needed tu call this API with these calls :
 
-- *https://tyradex.tech/api/v1/pokemon* To get the list of all pokemons
+- *https://tyradex.app/api/v1/pokemon* To get the list of all pokemons
 
-- *https://tyradex.tech/api/v1/pokemon/{id}* With id the pokemon's name or pokedex id to get all the information about the pokemon
+- *https://tyradex.app/api/v1/pokemon/{id}* With id the pokemon's name or pokedex id to get all the information about the pokemon
 
 Even if I used Tyradex.co for 99% of my website, I sill used PokeAPI.co for one call :
 

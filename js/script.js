@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Defining constants used several times in the script.
-  const TYRADEX_API = "https://tyradex.tech/api/v1/pokemon";
+  const TYRADEX_API = "https://tyradex.app/api/v1/pokemon";
   const POKE_IMG = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
   const pokemonsListElement = document.getElementById("poke-cards");
   const CHECKBOXES = document.querySelectorAll('input[name="selection"]');

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Getting the ID of the Pokémon from the URL, default value to 1.
   const POKEMON_ID =
     parseInt(new URLSearchParams(window.location.search).get("id")) || 1;
-  const TYRADEX_API = "https://tyradex.tech/api/v1/pokemon";
+  const TYRADEX_API = "https://tyradex.app/api/v1/pokemon";
   const POKE_API = "https://pokeapi.co/api/v2/pokemon-species/";
   const POKE_IMG_API =
     "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
